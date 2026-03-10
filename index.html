@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ZERO ০ — Civilization Engine v5</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; overflow:hidden; }
+body {
+  background:#010009;
+  font-family:'Georgia',serif;
+  color:#E8E0FF;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* ── LOADING ─────────────────────────────────────────────── */
+#loading {
+  position:fixed; inset:0; z-index:9999;
+  background:#010009;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:20px;
+  transition:opacity 1s;
+}
+#ld-glyph {
+  font-size:100px; color:#C8963E;
+  text-shadow:0 0 40px #C8963E, 0 0 80px #C8963E44;
+  animation:breathe 1.8s ease-in-out infinite;
+}
+#ld-bar { width:200px; height:1px; background:rgba(200,150,62,0.15); overflow:hidden; border-radius:2px; }
+#ld-bar-fill { height:100%; width:0; background:linear-gradient(90deg,#7C3AED,#C8963E); animation:fill-bar 1.4s ease-out forwards; }
+#ld-text { font-size:10px; color:#3d2b6a; letter-spacing:0.4em; }
+@keyframes fill-bar { to { width:100%; } }
+@keyframes breathe {
+  0%,100% { text-shadow:0 0 20px #C8963E66; transform:scale(0.97); }
+  50%      { text-shadow:0 0 60px #C8963E, 0 0 100px #C8963E44; transform:scale(1.03); }
+}
+
+/* ── TOPBAR ──────────────────────────────────────────────── */
+#topbar {
+  position:fixed; top:0; left:0; right:0; z-index:300;
+  background:linear-gradient(180deg,rgba(1,0,9,0.99) 0%,transparent 100%);
+  height:56px; padding:0 18px;
+  display:flex; align-items:center; gap:10px;
+}
+.tb-logo { font-size:32px; color:#C8963E; line-height:1; text-shadow:0 0 20px #C8963E99; }
+.tb-info { display:flex; flex-direction:column; }
+.tb-title { font-size:14px; font-weight:bold; letter-spacing:0.2em; color:#C8963E; }
+.tb-sub   { font-size:8px; color:#3d2b6a; letter-spacing:0.15em; margin-top:1px; }
+.tb-right { margin-left:auto; display:flex; gap:5px; align-items:center; flex-wrap:wrap; }
+
+.btn {
+  background:rgba(15,8,40,0.9); border:1px solid #2a1860;
+  color:#9A8FBF; padding:5px 10px; border-radius:5px;
+  cursor:pointer; font-size:10px; letter-spacing:0.05em;
+  transition:all 0.2s; white-space:nowrap;
+  font-family:Georgia,serif;
+}
+.btn:hover  { background:#2a1860; color:#E8E0FF; border-color:#5a3faf; }
+.btn.active { background:#1a0f3d; color:#C8963E; border-color:#C8963E88; }
+.btn.gold   { border-color:#C8963E44; color:#C8963E77; }
+.btn.gold:hover { background:#C8963E18; color:#C8963E; border-color:#C8963E; }
+.btn.ai-btn { border-color:#7C3AED55; color:#9A7FDF; }
+.btn.ai-btn:hover { background:#7C3AED22; color:#C8B0FF; border-color:#7C3AED; }
+
+/* ── CANVAS ──────────────────────────────────────────────── */
+#canvas { display:block; width:100vw; height:100vh; cursor:grab; touch-action:none; }
+#canvas:active { cursor:grabbing; }
+#pcanvas { position:fixed; inset:0; pointer-events:none; z-index:2; }
+
+/* ── AI EXPLORER PANEL ───────────────────────────────────── */
+#ai-panel {
+  position:fixed; right:0; top:56px; bottom:0; z-index:400;
+  width:320px;
+  background:rgba(4,2,18,0.98);
+  border-left:1px solid #1a0f3d;
+  transform:translateX(320px);
+  transition:transform 0.45s cubic-bezier(0.16,1,0.3,1);
+  display:flex; flex-direction:column;
+  box-shadow:-20px 0 60px rgba(124,58,237,0.1);
+}
+#ai-panel.open { transform:translateX(0); }
+
+#ai-header {
+  padding:16px 18px 12px;
+  border-bottom:1px solid #1a0f3d;
+  display:flex; align-items:flex-start; justify-content:space-between;
+  flex-shrink:0;
+}
+.ai-tag  { font-size:8px; letter-spacing:0.2em; color:#7C3AED; margin-bottom:5px; }
+.ai-node-name { font-size:16px; font-weight:bold; color:#F0EAFF; line-height:1.3; }
+.ai-node-meta { font-size:10px; color:#4A3F7A; margin-top:4px; }
+#ai-close {
+  background:none; border:none; color:#3d2b6a;
+  cursor:pointer; font-size:18px; line-height:1; flex-shrink:0;
+  transition:color 0.2s; padding:2px;
+}
+#ai-close:hover { color:#C8963E; }
+
+#ai-meta-bar {
+  display:flex; gap:0; border-bottom:1px solid #120b2e; flex-shrink:0;
+}
+.ai-meta-item {
+  flex:1; padding:10px 14px; border-right:1px solid #120b2e; cursor:pointer;
+  transition:background 0.2s;
+}
+.ai-meta-item:last-child { border-right:none; }
+.ai-meta-item:hover { background:rgba(124,58,237,0.08); }
+.ami-label { font-size:8px; letter-spacing:0.12em; color:#3d2b6a; margin-bottom:4px; }
+.ami-val   { font-size:11px; color:#7B6FA0; }
+
+#ai-body { flex:1; overflow-y:auto; padding:18px; }
+#ai-body::-webkit-scrollbar { width:4px; }
+#ai-body::-webkit-scrollbar-track { background:transparent; }
+#ai-body::-webkit-scrollbar-thumb { background:#1a0f3d; border-radius:2px; }
+
+/* AI Response area */
+#ai-prompt-area {
+  margin-bottom:14px;
+}
+.ai-prompt-label { font-size:9px; letter-spacing:0.15em; color:#4A3F7A; margin-bottom:8px; }
+.ai-prompt-pills { display:flex; flex-wrap:wrap; gap:5px; }
+.ai-pill {
+  background:rgba(124,58,237,0.12); border:1px solid #2d1b69;
+  color:#8880AA; font-size:9px; padding:4px 10px; border-radius:12px;
+  cursor:pointer; transition:all 0.2s; font-family:Georgia,serif;
+}
+.ai-pill:hover { background:rgba(124,58,237,0.25); color:#C8B0FF; border-color:#7C3AED88; }
+.ai-pill.active { background:rgba(124,58,237,0.3); color:#C8B0FF; border-color:#7C3AED; }
+
+#ai-response-box {
+  background:rgba(10,5,30,0.8);
+  border:1px solid #1a0f3d;
+  border-radius:8px; padding:14px;
+  min-height:80px;
+  margin-top:14px;
+}
+.air-thinking {
+  display:flex; align-items:center; gap:8px;
+  color:#4A3F7A; font-size:11px; font-style:italic;
+}
+.air-dots span {
+  display:inline-block; width:4px; height:4px;
+  background:#7C3AED; border-radius:50%; margin-right:3px;
+  animation:dot-pulse 1.2s ease-in-out infinite;
+}
+.air-dots span:nth-child(2) { animation-delay:0.2s; }
+.air-dots span:nth-child(3) { animation-delay:0.4s; }
+@keyframes dot-pulse { 0%,80%,100%{opacity:0.2; transform:scale(0.8)} 40%{opacity:1; transform:scale(1)} }
+
+.air-text {
+  font-size:12px; color:#A098C0; line-height:1.85;
+  white-space:pre-wrap;
+}
+.air-text em { color:#C8963E; font-style:normal; }
+.air-error { font-size:11px; color:#DC2626; }
+
+#ai-connections { margin-top:20px; }
+.aic-title { font-size:9px; letter-spacing:0.15em; color:#3d2b6a; margin-bottom:10px; }
+.aic-item {
+  display:flex; align-items:center; gap:8px;
+  padding:8px 10px; border-radius:6px; cursor:pointer;
+  transition:background 0.2s; margin-bottom:5px;
+}
+.aic-item:hover { background:rgba(124,58,237,0.1); }
+.aic-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.aic-name { font-size:11px; color:#7B6FA0; }
+.aic-rel  { font-size:9px; color:#3d2b6a; margin-left:auto; font-style:italic; }
+
+#ai-ask-bar {
+  padding:12px 18px; border-top:1px solid #1a0f3d; flex-shrink:0;
+  display:flex; gap:8px;
+}
+#ai-ask-input {
+  flex:1; background:rgba(10,5,30,0.8); border:1px solid #2a1860;
+  color:#C8C0E8; padding:8px 12px; border-radius:6px;
+  font-size:11px; font-family:Georgia,serif; outline:none;
+  transition:border-color 0.2s;
+}
+#ai-ask-input:focus { border-color:#7C3AED88; }
+#ai-ask-input::placeholder { color:#2d1b69; }
+#ai-ask-btn {
+  background:#7C3AED22; border:1px solid #7C3AED55;
+  color:#9A7FDF; padding:8px 12px; border-radius:6px;
+  cursor:pointer; font-size:12px; transition:all 0.2s;
+}
+#ai-ask-btn:hover { background:#7C3AED44; color:#C8B0FF; }
+
+/* ── KNOWLEDGE CARD (child nodes) ────────────────────────── */
+#kcard {
+  position:fixed; left:50%; bottom:24px;
+  transform:translateX(-50%) translateY(20px);
+  z-index:350; width:min(460px, 90vw);
+  background:rgba(4,2,18,0.98);
+  border:1px solid #2d1b69;
+  border-radius:12px; padding:18px 20px;
+  opacity:0; pointer-events:none;
+  transition:opacity 0.3s, transform 0.3s;
+  box-shadow:0 0 60px rgba(124,58,237,0.2);
+}
+#kcard.open { opacity:1; pointer-events:all; transform:translateX(-50%) translateY(0); }
+.kc-row { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+.kc-left { flex:1; }
+.kc-tag   { font-size:8px; letter-spacing:0.18em; color:#C8963E; margin-bottom:5px; }
+.kc-title { font-size:15px; font-weight:bold; color:#F0EAFF; margin-bottom:8px; }
+.kc-desc  { font-size:11px; color:#7B6FA0; line-height:1.7; }
+.kc-right { display:flex; flex-direction:column; gap:5px; flex-shrink:0; }
+.kc-pill  {
+  background:rgba(26,15,61,0.6); border:1px solid #1a0f3d;
+  border-radius:6px; padding:6px 10px; text-align:right;
+}
+.kcp-label { font-size:8px; color:#3d2b6a; }
+.kcp-val   { font-size:11px; color:#9A8FBF; margin-top:2px; }
+.kc-tl { margin-top:12px; display:flex; gap:0; overflow-x:auto; padding-bottom:4px; }
+.kc-tl-item {
+  display:flex; flex-direction:column; align-items:center;
+  min-width:80px; padding:0 8px;
+}
+.kc-tl-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.kc-tl-year { font-size:8px; color:#C8963E88; margin-top:5px; }
+.kc-tl-evt  { font-size:9px; color:#5A4F7A; text-align:center; margin-top:3px; line-height:1.4; }
+.kc-tl-line { width:40px; height:1px; background:#1a0f3d; margin-top:4px; flex-shrink:0; align-self:flex-start; margin-top:4px; }
+.kc-btn-row { display:flex; gap:6px; margin-top:12px; }
+.kc-ai-btn {
+  background:rgba(124,58,237,0.15); border:1px solid #7C3AED44;
+  color:#9A7FDF; padding:6px 12px; border-radius:5px;
+  cursor:pointer; font-size:10px; transition:all 0.2s; font-family:Georgia,serif;
+}
+.kc-ai-btn:hover { background:rgba(124,58,237,0.3); color:#C8B0FF; border-color:#7C3AED; }
+.kc-close-btn {
+  background:rgba(26,15,61,0.5); border:1px solid #1a0f3d;
+  color:#5A4F7A; padding:6px 12px; border-radius:5px;
+  cursor:pointer; font-size:10px; transition:all 0.2s; font-family:Georgia,serif;
+  margin-left:auto;
+}
+.kc-close-btn:hover { color:#C8963E; }
+
+/* ── TOOLTIP ─────────────────────────────────────────────── */
+#tip {
+  position:fixed; z-index:500; pointer-events:none;
+  background:rgba(4,2,18,0.97); border:1px solid #2d1b69;
+  border-radius:8px; padding:9px 13px; max-width:210px;
+  opacity:0; transform:translateY(4px);
+  transition:opacity 0.15s, transform 0.15s;
+}
+#tip.show { opacity:1; transform:translateY(0); }
+.tip-type { font-size:8px; letter-spacing:0.15em; color:#C8963E; margin-bottom:3px; }
+.tip-name { font-size:12px; font-weight:bold; color:#F0EAFF; margin-bottom:3px; }
+.tip-hint { font-size:10px; color:#5A4F7A; line-height:1.5; }
+.tip-cta  { font-size:9px; color:#4A3FAF; margin-top:5px; font-style:italic; }
+
+/* ── TIMELINE BAR ────────────────────────────────────────── */
+#tl-bar {
+  position:fixed; bottom:68px; left:50%; transform:translateX(-50%);
+  z-index:300;
+  background:rgba(4,2,18,0.97); border:1px solid #1a0f3d;
+  border-radius:10px; padding:12px 18px;
+  display:none; align-items:center;
+  max-width:92vw; overflow-x:auto; gap:0;
+}
+#tl-bar.show { display:flex; }
+.tl-ev { display:flex; flex-direction:column; align-items:center; min-width:84px; cursor:pointer; padding:0 6px; }
+.tl-ev:hover .tl-dot { transform:scale(1.5); box-shadow:0 0 10px currentColor; }
+.tl-dot  { width:9px; height:9px; border-radius:50%; margin-bottom:5px; transition:transform 0.2s; flex-shrink:0; }
+.tl-yr   { font-size:8px; color:#C8963E88; margin-bottom:2px; }
+.tl-nm   { font-size:8px; color:#5A4F7A; text-align:center; line-height:1.4; }
+.tl-ln   { width:36px; height:1px; background:#1a0f3d; margin-top:-14px; flex-shrink:0; }
+
+/* ── BREADCRUMB & HUD ────────────────────────────────────── */
+#breadcrumb {
+  position:fixed; bottom:20px; left:20px; z-index:300;
+  background:rgba(4,2,18,0.88); border:1px solid #120b2e;
+  border-radius:20px; padding:5px 14px;
+  font-size:10px; color:#3d2b6a;
+  display:flex; align-items:center; gap:5px;
+}
+.bc { color:#7B6FA0; cursor:pointer; transition:color 0.2s; }
+.bc:hover, .bc.on { color:#C8963E; }
+.bcs { color:#1a0f3d; }
+
+#hud {
+  position:fixed; bottom:20px; right:20px; z-index:300;
+  display:flex; flex-direction:column; gap:5px;
+}
+.hb {
+  width:34px; height:34px;
+  background:rgba(15,8,40,0.9); border:1px solid #1a0f3d;
+  color:#7B6FA0; border-radius:6px; cursor:pointer;
+  font-size:15px; display:flex; align-items:center; justify-content:center;
+  transition:all 0.2s;
+}
+.hb:hover { background:#2a1860; color:#E8E0FF; }
+
+/* ── STORY MODE ──────────────────────────────────────────── */
+#story {
+  position:fixed; left:20px; top:70px; z-index:400;
+  width:240px;
+  background:rgba(4,2,18,0.97); border:1px solid #1a0f3d;
+  border-radius:10px; padding:16px;
+  transform:translateX(-280px); opacity:0;
+  transition:transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s;
+  display:none;
+}
+#story.open { transform:translateX(0); opacity:1; }
+.st-title { font-size:9px; letter-spacing:0.18em; color:#C8963E; margin-bottom:10px; }
+.st-text  { font-size:11px; color:#5A4F7A; line-height:1.85; }
+.st-quote { font-size:12px; color:#8880AA; font-style:italic; border-left:2px solid #C8963E33; padding-left:10px; margin:12px 0; line-height:1.7; }
+
+/* ── ANIMATIONS ──────────────────────────────────────────── */
+@keyframes spin-cw  { from{transform:rotate(0deg)}   to{transform:rotate(360deg)} }
+@keyframes spin-ccw { from{transform:rotate(0deg)}   to{transform:rotate(-360deg)} }
+.gcw  { animation:spin-cw  55s linear infinite; transform-origin:center; transform-box:fill-box; }
+.gccw { animation:spin-ccw 80s linear infinite; transform-origin:center; transform-box:fill-box; }
+.gmed { animation:spin-cw  38s linear infinite; transform-origin:center; transform-box:fill-box; }
+.hcw  { animation:spin-cw  18s linear infinite; transform-origin:center; transform-box:fill-box; }
+.hccw { animation:spin-ccw 28s linear infinite; transform-origin:center; transform-box:fill-box; }
+.core-pulse { animation:breathe 3s ease-in-out infinite; transform-origin:center; transform-box:fill-box; }
+
+/* ── AI MODE glow on nodes ───────────────────────────────── */
+.node-g.ai-active circle.node-bg {
+  filter:url(#g-ai) !important;
+  stroke-width:3 !important;
+}
+
+/* ── Scrollbar global ────────────────────────────────────── */
+* { scrollbar-width:thin; scrollbar-color:#1a0f3d transparent; }
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div id="ld-glyph">০</div>
+  <div id="ld-bar"><div id="ld-bar-fill"></div></div>
+  <div id="ld-text">ZERO CIVILIZATION ENGINE v5</div>
+</div>
+
+<div id="topbar">
+  <div class="tb-logo">০</div>
+  <div class="tb-info">
+    <div class="tb-title">ZERO <span style="font-size:10px;color:#2d1b69">v5</span></div>
+    <div class="tb-sub">CIVILIZATION ENGINE — THE SUPREME UNIVERSAL MIRACLE</div>
+  </div>
+  <div class="tb-right">
+    <button class="btn ai-btn" id="btnAI">✦ AI Explorer</button>
+    <button class="btn" id="btnTL">⏱ Timeline</button>
+    <button class="btn" id="btnStory">◈ Story</button>
+    <button class="btn" id="btnMin">◎ Minimal</button>
+    <button class="btn" id="btnReset">⟳</button>
+    <button class="btn gold" id="btnPNG">↓ PNG</button>
+  </div>
+</div>
+
+<canvas id="pcanvas"></canvas>
+<svg id="canvas"></svg>
+
+<div id="tip">
+  <div class="tip-type" id="tip-type"></div>
+  <div class="tip-name" id="tip-name"></div>
+  <div class="tip-hint" id="tip-hint"></div>
+  <div class="tip-cta"  id="tip-cta"></div>
+</div>
+
+<!-- AI Panel -->
+<div id="ai-panel">
+  <div id="ai-header">
+    <div>
+      <div class="ai-tag" id="ai-tag">CLAUDE + ME &nbsp;·&nbsp; ZERO EXPLORER</div>
+      <div class="ai-node-name" id="ai-node-name">একটি নোড বেছে নিন</div>
+      <div class="ai-node-meta" id="ai-node-meta">← মানচিত্রে ক্লিক করুন</div>
+    </div>
+    <button id="ai-close">✕</button>
+  </div>
+  <div id="ai-meta-bar">
+    <div class="ai-meta-item">
+      <div class="ami-label">সময়কাল</div>
+      <div class="ami-val" id="ai-year">—</div>
+    </div>
+    <div class="ai-meta-item">
+      <div class="ami-label">সভ্যতা</div>
+      <div class="ami-val" id="ai-civ">—</div>
+    </div>
+    <div class="ai-meta-item">
+      <div class="ami-label">প্রকার</div>
+      <div class="ami-val" id="ai-type-val">—</div>
+    </div>
+  </div>
+  <div id="ai-body">
+    <div id="ai-prompt-area">
+      <div class="ai-prompt-label">AI-কে জিজ্ঞেস করুন</div>
+      <div class="ai-prompt-pills" id="ai-pills"></div>
+    </div>
+    <div id="ai-response-box">
+      <div class="air-thinking" id="ai-idle" style="color:#2d1b69;font-style:normal;font-size:12px">
+        একটি প্রশ্ন বেছে নিন বা নিজে লিখুন...
+      </div>
+      <div class="air-thinking" id="ai-loading" style="display:none">
+        <div class="air-dots"><span></span><span></span><span></span></div>
+        Claude ভাবছে...
+      </div>
+      <div class="air-text" id="ai-response" style="display:none"></div>
+    </div>
+    <div id="ai-connections">
+      <div class="aic-title">সংযুক্ত নোড</div>
+      <div id="ai-conn-list"></div>
+    </div>
+  </div>
+  <div id="ai-ask-bar">
+    <input type="text" id="ai-ask-input" placeholder="নিজের প্রশ্ন লিখুন...">
+    <button id="ai-ask-btn">→</button>
+  </div>
+</div>
+
+<!-- Knowledge Card -->
+<div id="kcard">
+  <div class="kc-row">
+    <div class="kc-left">
+      <div class="kc-tag" id="kc-tag">CHILD NODE</div>
+      <div class="kc-title" id="kc-title"></div>
+      <div class="kc-desc"  id="kc-desc"></div>
+    </div>
+    <div class="kc-right">
+      <div class="kc-pill">
+        <div class="kcp-label">সময়</div>
+        <div class="kcp-val" id="kc-year"></div>
+      </div>
+      <div class="kc-pill">
+        <div class="kcp-label">সভ্যতা</div>
+        <div class="kcp-val" id="kc-civ"></div>
+      </div>
+    </div>
+  </div>
+  <div class="kc-tl" id="kc-tl"></div>
+  <div class="kc-btn-row">
+    <button class="kc-ai-btn" id="kc-ai-btn">✦ AI বিশ্লেষণ</button>
+    <button class="kc-close-btn" id="kc-close">বন্ধ করুন</button>
+  </div>
+</div>
+
+<!-- Story -->
+<div id="story">
+  <div class="st-title">ZERO — সভ্যতার ইঞ্জিন</div>
+  <div class="st-text">শূন্য একটি সংখ্যা নয়। এটি একটি বিপ্লব। চোদ্দশো বছর আগে একটি ছোট বিন্দু আঁকা হয়েছিল — সেই বিন্দুই বদলে দিয়েছে সবকিছু।</div>
+  <div class="st-quote">❝ শূন্য 'কিছু না' নয় — শূন্য হলো 'কিছু' বানানোর নিয়ম। ❞</div>
+  <div class="st-text">প্রতিটি নোড একটি অধ্যায়। AI Explorer দিয়ে গভীরে যান।</div>
+  <div class="st-quote" style="border-left-color:#7C3AED33;margin-top:14px;font-size:11px;color:#5A4F7A">
+    ﴿فَإِذَا فَرَغْتَ فَٱنصَبْ﴾<br>যখন ফারেগ হবে, পরিশ্রমে লেগে পড়।<br><span style="font-size:9px;color:#2d1b69">— আল-কুরআন ৯৪:৭</span>
+  </div>
+</div>
+
+<!-- Timeline -->
+<div id="tl-bar"></div>
+
+<!-- Breadcrumb & HUD -->
+<div id="breadcrumb">
+  <span class="bc on" id="bc-root">০ ZERO</span>
+</div>
+<div id="hud">
+  <button class="hb" id="hZoomIn">+</button>
+  <button class="hb" id="hZoomOut">−</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════════════
+const BRANCHES = [
+  {
+    id:"math", label:"গণিত", en:"Mathematics", color:"#7C3AED", icon:"∑",
+    desc:"শূন্য থেকে অসীম — সংখ্যার সম্পূর্ণ ইতিহাস",
+    aiPrompts:["শূন্যের গাণিতিক যাত্রা সংক্ষেপে বলুন","ভারতীয় গণিত ইউরোপে কীভাবে পৌঁছাল?","শূন্য ছাড়া কি ক্যালকুলাস সম্ভব?"],
+    connections:[{id:"tech",rel:"ভিত্তি"},{id:"lang",rel:"প্রতীক"},{id:"civ",rel:"উৎস"}],
+    kids:[
+      {id:"m1",label:"বখশালি পাণ্ডুলিপি",desc:"বিশ্বের প্রাচীনতম শূন্য চিহ্ন।",year:"২৫৫–৮৮৫ CE",civ:"ভারত",timeline:["255 CE — প্রাচীনতম ফোলিও","Oxford রেডিওকার্বন ২০১৭","ভূর্জপত্রে বিন্দু হিসেবে"]},
+      {id:"m2",label:"আর্যভট্ট",desc:"দশমিক স্থানীয় মান পদ্ধতির প্রথম পূর্ণ প্রয়োগ।",year:"৪৯৯ CE",civ:"ভারত",timeline:["499 CE — Aryabhatiya","শূন্য ছাড়া স্থানীয় মান অসম্ভব","Greek পদ্ধতির সীমা অতিক্রম"]},
+      {id:"m3",label:"ব্রহ্মগুপ্ত",desc:"প্রথমবার শূন্যের গাণিতিক নিয়ম লিখিত।",year:"৬২৮ CE",civ:"ভারত",timeline:["628 CE — Brahmasphutasiddhanta","0+n=n প্রথম লিখিত","0×n=0 ফর্মালাইজড"]},
+      {id:"m4",label:"স্থানীয় মান",desc:"একই চিহ্ন ভিন্ন স্থানে ভিন্ন মান।",year:"৫ম–৭ম শতাব্দী",civ:"দক্ষিণ এশিয়া",timeline:["1, 10, 100 — শূন্যের ভূমিকা","Roman numerals scale করতে পারেনি","সংখ্যা থেকে সিস্টেম"]},
+      {id:"m5",label:"ক্যালকুলাস",desc:"শূন্যে set করে সমাধান — Newton ও Leibniz।",year:"১৬৬৫–১৬৮৪",civ:"ইউরোপ",timeline:["1665 — Newton fluxions","1684 — Leibniz calculus","Gradient descent আজও শূন্য খোঁজে"]},
+      {id:"m6",label:"দ্বিমিক পদ্ধতি",desc:"০ ও ১ দিয়ে সমগ্র ডিজিটাল মহাবিশ্ব।",year:"১৭০৩",civ:"Germany",timeline:["1703 — Leibniz binary","1936 — Turing machine","1945 — ENIAC"]},
+    ]
+  },
+  {
+    id:"consc", label:"চেতনা", en:"Consciousness", color:"#9333EA", icon:"☸",
+    desc:"শূন্যতা ও আত্মার দর্শন",
+    aiPrompts:["বৌদ্ধ শূন্যতা ও গণিতের শূন্যের সম্পর্ক কী?","সুফি ফানা মানে কী?","কোয়ান্টাম শূন্য কী?"],
+    connections:[{id:"creat",rel:"উৎস"},{id:"lang",rel:"নামকরণ"},{id:"math",rel:"দর্শন"}],
+    kids:[
+      {id:"c1",label:"বৌদ্ধ শূন্যতা",desc:"সুন্যতা — সকল বস্তু স্বভাবতই শূন্য।",year:"২য় শতাব্দী CE",civ:"ভারত",timeline:["Nagarjuna Madhyamaka","Sunyata = emptiness","দর্শন থেকে গণিতে প্রবাহ"]},
+      {id:"c2",label:"বেদান্ত শূন্য",desc:"ব্রহ্ম নির্গুণ — গুণহীন পরম সত্তা।",year:"৮ম শতাব্দী",civ:"ভারত",timeline:["Shankara Advaita","Brahman = beyond description","শূন্য ও পূর্ণতার অভেদ"]},
+      {id:"c3",label:"জৈন অনন্ত",desc:"অসীমের বিভিন্ন স্তর — গণনাযোগ্য ও অগণনীয়।",year:"৬ষ্ঠ শতাব্দী BCE",civ:"ভারত",timeline:["Jain concept of ananta","Countable vs uncountable","Cantor-এর পূর্বসূরি ২৪০০ বছর আগে"]},
+      {id:"c4",label:"সুফি ফানা",desc:"আত্মার বিলয় — শূন্যে মিলিয়ে যাওয়াই পরিপূর্ণতা।",year:"৯ম–১১শ শতাব্দী",civ:"আরব/ফার্সি",timeline:["Al-Hallaj: Ana'l-Haqq","Rumi's nothingness","শূন্যই পরম সত্য"]},
+      {id:"c5",label:"ধ্যান",desc:"শূন্যমনা অবস্থা — সব সম্ভাবনা জাগ্রত।",year:"অতীত–বর্তমান",civ:"সর্বজনীন",timeline:["Zen — Mu (nothing)","Yoga: nirvikalpa samadhi","Quantum zero-point energy"]},
+      {id:"c6",label:"কোয়ান্টাম শূন্য",desc:"Vacuum energy — কণা-প্রতিকণার ক্রমাগত উৎপত্তি।",year:"১৯২৭–বর্তমান",civ:"আধুনিক পদার্থবিজ্ঞান",timeline:["Heisenberg uncertainty 1927","Zero-point energy = ½ℏω","Casimir effect প্রমাণিত"]},
+    ]
+  },
+  {
+    id:"civ", label:"সভ্যতা", en:"Civilization", color:"#C8963E", icon:"⊞",
+    desc:"সিন্ধু থেকে সিলিকন ভ্যালি",
+    aiPrompts:["ভারত থেকে ইউরোপে শূন্য কীভাবে গেল?","ঔপনিবেশিকতা কীভাবে শূন্যের ইতিহাস মুছে দিয়েছে?","সিন্ধু সভ্যতার সাথে শূন্যের সম্পর্ক?"],
+    connections:[{id:"math",rel:"উৎপত্তি"},{id:"lang",rel:"সংক্রমণ"},{id:"creat",rel:"পুনর্গঠন"}],
+    kids:[
+      {id:"v1",label:"সিন্ধু সভ্যতা",desc:"মোহেঞ্জোদারো — দশমিক পরিমাপের শুরু।",year:"২৬০০–১৯০০ BCE",civ:"সিন্ধু উপত্যকা",timeline:["Grid city planning","১:২:৪:৮ ratio weights","Giosan 2012 নদী তত্ত্ব"]},
+      {id:"v2",label:"ভারত: উৎসভূমি",desc:"শূন্যের জন্মস্থান — গণিত ও দর্শনের সংমিশ্রণ।",year:"৫ম–৭ম শতাব্দী",civ:"গুপ্ত যুগ",timeline:["Aryabhata, Brahmagupta","Nalanda — প্রথম বিশ্ববিদ্যালয়","Sunya = Sanskrit"]},
+      {id:"v3",label:"আরব সংক্রমণ",desc:"Al-Khwarizmi ভারতীয় গণিত আরবিতে আনেন।",year:"৮২০ CE",civ:"আব্বাসীয়",timeline:["Kitab al-Hisab 820","Sifr → cipher → zero","Baghdad House of Wisdom"]},
+      {id:"v4",label:"ইউরোপে বিস্তার",desc:"ফিবোনাচি Liber Abaci-তে প্রচার করেন।",year:"১২০২",civ:"মধ্যযুগীয় ইউরোপ",timeline:["Fibonacci Liber Abaci","Roman numerals বিদায়","বাণিজ্য বিপ্লব"]},
+      {id:"v5",label:"ঔপনিবেশিক মুছে দেওয়া",desc:"পাঠ্যক্রমে ভারতীয় অবদান মুছে যায়।",year:"১৮শ–২০শ শতাব্দী",civ:"ঔপনিবেশিক আমল",timeline:["Hindu-Arabic — কার নাম?","Curriculum থেকে অনুপস্থিত","Credit ≠ Origin"]},
+      {id:"v6",label:"পুনরুদ্ধার",desc:"মালিকানা ফিরিয়ে আনার আন্দোলন।",year:"বর্তমান",civ:"বৈশ্বিক",timeline:["Evidence vault","Curriculum সংযোজন","Credit + Industry পুনর্গঠন"]},
+    ]
+  },
+  {
+    id:"tech", label:"প্রযুক্তি", en:"Technology", color:"#0891B2", icon:"⬡",
+    desc:"শূন্য থেকে সিলিকন — ডিজিটাল বিশ্বের ভিত্তি",
+    aiPrompts:["AI-এ শূন্যের ভূমিকা কী?","২০৩৮ সমস্যা কী এবং কেন গুরুত্বপূর্ণ?","binary ০/১ এর উৎস কোথায়?"],
+    connections:[{id:"math",rel:"প্রয়োগ"},{id:"creat",rel:"সৃষ্টি"},{id:"lang",rel:"কোড"}],
+    kids:[
+      {id:"t1",label:"বাইনারি ০/১",desc:"দুটি সংখ্যায় সমগ্র ডিজিটাল জ্ঞান।",year:"১৭০৩",civ:"Germany",timeline:["Leibniz 1703","Inspired by I Ching","0=off, 1=on"]},
+      {id:"t2",label:"কম্পিউটিং",desc:"ENIAC থেকে আধুনিক CPU।",year:"১৯৪৫–বর্তমান",civ:"USA",timeline:["ENIAC 1945","Intel 4004 1971","Trillion transistors 2024"]},
+      {id:"t3",label:"কৃত্রিম বুদ্ধিমত্তা",desc:"Gradient descent শূন্য খোঁজে।",year:"১৯৫৬–বর্তমান",civ:"বৈশ্বিক",timeline:["Backpropagation","Zero-initialization","LLM: trillions of zero ops"]},
+      {id:"t4",label:"ব্যাংকিং",desc:"শূন্য = ভারসাম্যের ভিত্তি।",year:"মধ্যযুগ–বর্তমান",civ:"বৈশ্বিক",timeline:["Double-entry bookkeeping","Balance sheet zeros","Digital ledger"]},
+      {id:"t5",label:"IEEE 754",desc:"+0 ও −0 আলাদা — শূন্যের দুটি রূপ।",year:"১৯৮৫",civ:"International",timeline:["IEEE standard 1985","AI ethical risk","Medical false negatives"]},
+      {id:"t6",label:"২০৩৮ সমস্যা",desc:"32-bit overflow — ১৯ জানুয়ারি ২০৩৮।",year:"২০৩৮",civ:"ডিজিটাল বিশ্ব",timeline:["Unix epoch 1970","Max 32-bit: 2,147,483,647","2038: overflow → 1901"]},
+    ]
+  },
+  {
+    id:"lang", label:"ভাষা", en:"Language", color:"#059669", icon:"॰",
+    desc:"শূন্যের প্রতীক ও লিপির বিবর্তন",
+    aiPrompts:["'zero' শব্দটি কোথা থেকে এল?","বাংলা ০ চিহ্নের ইতিহাস কী?","পিঙ্গলের ছন্দশাস্ত্র কেন গুরুত্বপূর্ণ?"],
+    connections:[{id:"math",rel:"প্রতীক"},{id:"civ",rel:"সংক্রমণ"},{id:"consc",rel:"নামকরণ"}],
+    kids:[
+      {id:"l1",label:"সংস্কৃত সুন্য",desc:"'শূন্য' = ফাঁকা, অনুপস্থিতি।",year:"৫ম শতাব্দী বা আগে",civ:"ভারত",timeline:["Sunya = void","Pingala Chandahsastra","Mathematical zero-এ পরিণতি"]},
+      {id:"l2",label:"আরবি → Zero",desc:"Sifr → Zephirum → Zero।",year:"৯ম–১৩শ শতাব্দী",civ:"আরব → ইউরোপ",timeline:["Sifr (Arabic)","Zephirum (Latin)","Zero (Italian/English)"]},
+      {id:"l3",label:"বাংলা ০",desc:"বাংলা লিপির নিজস্ব শূন্য।",year:"মধ্যযুগ–বর্তমান",civ:"বাংলা অঞ্চল",timeline:["Brahmi script origin","বাংলা ০ ১ ২...৯","Unicode: U+09E6"]},
+      {id:"l4",label:"গ্লিফ বিবর্তন",desc:"বিন্দু → ডিম্বাকার → বৃত্ত।",year:"৩য় BCE–বর্তমান",civ:"বৈশ্বিক",timeline:["Dot (Bakhshali)","Oval → circle","Modern 0 typography"]},
+      {id:"l5",label:"পিঙ্গলের ছন্দ",desc:"লঘু=০, গুরু=১ — Leibniz-এর ১৮০০ বছর আগে।",year:"খ্রিস্টপূর্ব ২য় শতাব্দী",civ:"ভারত",timeline:["Laghu=0, Guru=1","Pascal's triangle ancestor","Binary pre-discovery"]},
+      {id:"l6",label:"ডিজিটাল কোড",desc:"0x00, NULL, NaN — শূন্যের অসংখ্য রূপ।",year:"২০শ শতাব্দী–বর্তমান",civ:"Digital",timeline:["NULL pointer","IEEE NaN","div/0 = undefined"]},
+    ]
+  },
+  {
+    id:"creat", label:"সৃষ্টি", en:"Creation", color:"#DC2626", icon:"✦",
+    desc:"শূন্য থেকে সৃষ্টির দর্শন",
+    aiPrompts:["Big Bang কি সত্যিই শূন্য থেকে শুরু হয়েছিল?","ফিবোনাচি ধারায় শূন্যের ভূমিকা কী?","ZERO Book-এর মানিফেস্টো কী?"],
+    connections:[{id:"consc",rel:"উৎস"},{id:"civ",rel:"পুনর্জন্ম"},{id:"tech",rel:"প্রযোজনা"}],
+    kids:[
+      {id:"r1",label:"বিগ ব্যাং",desc:"মহাবিশ্ব শূন্য থেকে জন্মেছে — t=0।",year:"১৩.৮ বিলিয়ন বছর আগে",civ:"মহাবিশ্ব",timeline:["t=0 Big Bang","Planck time: 10⁻⁴³s","শূন্যশক্তি থেকে সবকিছু"]},
+      {id:"r2",label:"কোয়ান্টাম শূন্য",desc:"Vacuum energy — Casimir effect প্রমাণিত।",year:"১৯৪৮",civ:"পদার্থবিজ্ঞান",timeline:["Casimir effect 1948","Zero-point energy = ½ℏω","Dark energy connection"]},
+      {id:"r3",label:"ফিবোনাচি",desc:"০, ১ থেকে শুরু — প্রকৃতির গণিত।",year:"১২০২",civ:"প্রকৃতি",timeline:["0,1,1,2,3,5,8...","Golden ratio φ=1.618","Shell, flower, galaxy"]},
+      {id:"r4",label:"পবিত্র জ্যামিতি",desc:"শূন্যবিন্দু থেকে সব জ্যামিতি।",year:"প্রাচীনকাল",civ:"সর্বজনীন",timeline:["Vesica Piscis","Metatron's Cube","Mandala — zero at center"]},
+      {id:"r5",label:"কুরআন ৯৪:৭",desc:"ফারেগ হলে পরিশ্রমে লেগে পড়।",year:"৬১০ CE",civ:"ইসলামিক ঐতিহ্য",timeline:["Surah Al-Inshirah","After ease, hardship","Zero as new beginning"]},
+      {id:"r6",label:"মানিফেস্টো",desc:"শূন্যের পক্ষে — স্মৃতিহীনতার বিরুদ্ধে।",year:"২০২৫–২০২৬",civ:"ZERO Book",timeline:["Explain কম, finish বেশি","Evidence → Curriculum","Spine first, বিস্তার পরে"]},
+    ]
+  },
+];
+
+const TIMELINE_EVENTS = [
+  {year:"~300 BCE",label:"পিঙ্গল\nছন্দ",color:"#059669",branchId:"lang",kidId:"l5"},
+  {year:"2600 BCE",label:"সিন্ধু\nসভ্যতা",color:"#C8963E",branchId:"civ",kidId:"v1"},
+  {year:"255 CE", label:"বখশালি",color:"#7C3AED",branchId:"math",kidId:"m1"},
+  {year:"499 CE", label:"আর্যভট্ট",color:"#7C3AED",branchId:"math",kidId:"m2"},
+  {year:"628 CE", label:"ব্রহ্মগুপ্ত",color:"#7C3AED",branchId:"math",kidId:"m3"},
+  {year:"820 CE", label:"আল-খোয়ারিজমি",color:"#C8963E",branchId:"civ",kidId:"v3"},
+  {year:"1202",   label:"ফিবোনাচি",color:"#DC2626",branchId:"creat",kidId:"r3"},
+  {year:"1703",   label:"Binary",color:"#0891B2",branchId:"math",kidId:"m6"},
+  {year:"1945",   label:"ENIAC",color:"#0891B2",branchId:"tech",kidId:"t2"},
+  {year:"2038",   label:"2038\nসমস্যা",color:"#DC2626",branchId:"tech",kidId:"t6"},
+];
+
+// Knowledge graph cross connections
+const CROSS_LINKS = [
+  {a:"math",b:"tech",strength:0.9},
+  {a:"math",b:"lang",strength:0.6},
+  {a:"consc",b:"creat",strength:0.8},
+  {a:"civ",b:"lang",strength:0.7},
+  {a:"tech",b:"creat",strength:0.5},
+  {a:"civ",b:"math",strength:0.7},
+];
+
+// ═══════════════════════════════════════════════════════════
+//  LAYOUT CONSTANTS
+// ═══════════════════════════════════════════════════════════
+const BRANCH_R=190, CHILD_R=355, CHILD_SPREAD=0.75;
+const ROOT_R=66, BRANCH_NR=40, CHILD_NR=23;
+const W=window.innerWidth, H=window.innerHeight;
+
+// ═══════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════
+let expandedBranch=null, selectedNode=null;
+let aiOpen=false, tlOpen=false, storyOpen=false, minMode=false;
+let currentTx=d3.zoomIdentity;
+let aiPanelNode=null;
+
+// ═══════════════════════════════════════════════════════════
+//  PARTICLE CANVAS
+// ═══════════════════════════════════════════════════════════
+const pc=document.getElementById("pcanvas");
+pc.width=W; pc.height=H;
+const px=pc.getContext("2d");
+const PARTS=[];
+let ptick=0;
+
+function branchScrPos(branchId){
+  const bi=BRANCHES.findIndex(b=>b.id===branchId);
+  if(bi<0) return {x:W/2,y:H/2};
+  const a=(bi/BRANCHES.length)*2*Math.PI-Math.PI/2;
+  return {
+    x:W/2+BRANCH_R*Math.cos(a)*currentTx.k+currentTx.x,
+    y:H/2+BRANCH_R*Math.sin(a)*currentTx.k+currentTx.y
+  };
+}
+
+function addParticle(sx,sy,tx2,ty2,color,life){
+  PARTS.push({sx,sy,tx:tx2,ty:ty2,color,life:0,maxLife:life||75});
+}
+
+function renderParticles(){
+  px.clearRect(0,0,W,H);
+  for(let i=PARTS.length-1;i>=0;i--){
+    const p=PARTS[i]; p.life++;
+    const t=p.life/p.maxLife;
+    const x=p.sx+(p.tx-p.sx)*t;
+    const y=p.sy+(p.ty-p.sy)*t;
+    const a=Math.sin(t*Math.PI)*0.9;
+    const hex=Math.floor(a*255).toString(16).padStart(2,"0");
+    px.beginPath(); px.arc(x,y,2.8,0,Math.PI*2);
+    px.fillStyle=p.color+hex; px.fill();
+    px.beginPath(); px.arc(x,y,6,0,Math.PI*2);
+    px.fillStyle=p.color+Math.floor(a*55).toString(16).padStart(2,"0"); px.fill();
+    if(p.life>=p.maxLife) PARTS.splice(i,1);
+  }
+  requestAnimationFrame(renderParticles);
+}
+renderParticles();
+
+function tickParts(){
+  ptick++;
+  const cx=W/2+currentTx.x, cy=H/2+currentTx.y;
+  if(ptick%22===0){
+    const br=BRANCHES[Math.floor(Math.random()*BRANCHES.length)];
+    const bp=branchScrPos(br.id);
+    addParticle(cx,cy,bp.x,bp.y,br.color,70);
+  }
+  if(ptick%38===0 && expandedBranch){
+    const br=BRANCHES.find(b=>b.id===expandedBranch);
+    if(br){
+      const bp=branchScrPos(br.id);
+      const ki=Math.floor(Math.random()*br.kids.length);
+      const bi=BRANCHES.indexOf(br);
+      const ba=(bi/BRANCHES.length)*2*Math.PI-Math.PI/2;
+      const ka=ba+(ki-(br.kids.length-1)/2)*(CHILD_SPREAD/br.kids.length);
+      const kx=W/2+CHILD_R*Math.cos(ka)*currentTx.k+currentTx.x;
+      const ky=H/2+CHILD_R*Math.sin(ka)*currentTx.k+currentTx.y;
+      addParticle(bp.x,bp.y,kx,ky,br.color,60);
+    }
+  }
+  // Feedback: child → center (gold)
+  if(ptick%55===0 && expandedBranch){
+    const bp=branchScrPos(expandedBranch);
+    addParticle(bp.x,bp.y,cx,cy,"#C8963E",90);
+  }
+  setTimeout(tickParts,16);
+}
+tickParts();
+
+// ═══════════════════════════════════════════════════════════
+//  SVG SETUP
+// ═══════════════════════════════════════════════════════════
+const svg=d3.select("#canvas").attr("width",W).attr("height",H);
+const defs=svg.append("defs");
+
+function mkGlow(id,color,std){
+  const f=defs.append("filter").attr("id",id).attr("x","-60%").attr("y","-60%").attr("width","220%").attr("height","220%");
+  f.append("feGaussianBlur").attr("in","SourceGraphic").attr("stdDeviation",std).attr("result","blur");
+  const m=f.append("feMerge");
+  m.append("feMergeNode").attr("in","blur");
+  m.append("feMergeNode").attr("in","SourceGraphic");
+}
+mkGlow("g-gold","#C8963E",10); mkGlow("g-goldx","#C8963E",24);
+mkGlow("g-v","#7C3AED",8);     mkGlow("g-p","#9333EA",8);
+mkGlow("g-c","#0891B2",8);     mkGlow("g-g","#059669",8);
+mkGlow("g-r","#DC2626",8);     mkGlow("g-o","#C8963E",8);
+mkGlow("g-ai","#7C3AED",16);
+
+const GF={"#7C3AED":"url(#g-v)","#9333EA":"url(#g-p)","#C8963E":"url(#g-o)","#0891B2":"url(#g-c)","#059669":"url(#g-g)","#DC2626":"url(#g-r)"};
+
+const rg=defs.append("radialGradient").attr("id","rg-c").attr("cx","50%").attr("cy","50%").attr("r","50%");
+rg.append("stop").attr("offset","0%").attr("stop-color","#1e0b54");
+rg.append("stop").attr("offset","100%").attr("stop-color","#03010e");
+
+const rootG=svg.append("g").attr("id","rg");
+
+// Stars
+const SD=d3.range(160).map(()=>({x:(Math.random()-0.5)*2800,y:(Math.random()-0.5)*2800,r:Math.random()*1.2+0.15,o:Math.random()*0.5+0.08}));
+const starsG=rootG.append("g").attr("id","stars");
+starsG.selectAll("c").data(SD).enter().append("circle").attr("cx",d=>d.x).attr("cy",d=>d.y).attr("r",d=>d.r).attr("fill","#fff").attr("opacity",d=>d.o);
+
+// Sacred geometry
+const geoG=rootG.append("g").attr("id","geo");
+[115,185,255,355].forEach((r,i)=>{
+  geoG.append("circle").attr("r",r).attr("fill","none")
+    .attr("stroke","#C8963E").attr("stroke-width",0.3).attr("stroke-opacity",0.09-i*0.015)
+    .attr("stroke-dasharray",i%2===0?"4 9":"2 11");
+});
+function hp(r){return d3.range(6).map(i=>{const a=i*Math.PI/3-Math.PI/6;return[r*Math.cos(a),r*Math.sin(a)];});}
+["#7C3AED","#C8963E","#0891B2"].forEach((c,i)=>{
+  const g=geoG.append("g").attr("class",i%2===0?"gcw":"gccw");
+  g.append("polygon").attr("points",hp([155,230,310][i]).map(p=>p.join(",")).join(" "))
+    .attr("fill","none").attr("stroke",c).attr("stroke-width",0.4).attr("stroke-opacity",0.18);
+});
+
+// Cross-connection layer (knowledge graph)
+const crossG=rootG.append("g").attr("id","cross-links");
+
+// Links, halos, nodes layers
+const linksG=rootG.append("g").attr("id","links");
+const halosG=rootG.append("g").attr("id","halos");
+const nodesG=rootG.append("g").attr("id","nodes");
+
+// ── CENTER CORE ────────────────────────────────────────────
+const coreG=rootG.append("g").attr("id","core");
+[92,112,132,155].forEach((r,i)=>{
+  coreG.append("circle").attr("r",r).attr("fill","none")
+    .attr("stroke","#C8963E").attr("stroke-width",0.55).attr("stroke-opacity",0.06+i*0.02)
+    .attr("stroke-dasharray",i%2===0?"3 8":"1.5 10");
+});
+const ih1=coreG.append("g").attr("class","gcw");
+ih1.append("circle").attr("r",80).attr("fill","none").attr("stroke","#C8963E").attr("stroke-width",1.1).attr("stroke-opacity",0.28).attr("stroke-dasharray","5 13");
+const ih2=coreG.append("g").attr("class","gccw");
+ih2.append("circle").attr("r",70).attr("fill","none").attr("stroke","#7C3AED").attr("stroke-width",0.6).attr("stroke-opacity",0.18).attr("stroke-dasharray","3 8");
+coreG.append("circle").attr("r",ROOT_R).attr("fill","url(#rg-c)").attr("stroke","#C8963E").attr("stroke-width",2.4).attr("filter","url(#g-goldx)");
+coreG.append("circle").attr("r",ROOT_R-9).attr("fill","none").attr("stroke","#C8963E").attr("stroke-width",0.7).attr("stroke-opacity",0.45).attr("stroke-dasharray","2 5");
+coreG.append("text").attr("text-anchor","middle").attr("dominant-baseline","central").attr("dy","-8px").attr("fill","#C8963E").attr("font-size","48px").attr("font-weight","bold").attr("font-family","Georgia,serif").attr("filter","url(#g-gold)").attr("class","core-pulse").text("০");
+
+// Cycling subtitle
+const fadeTexts=["Origin of Numbers","Source of Systems","শূন্যই ক্ষমতা","সভ্যতার ইঞ্জিন","The Supreme Miracle"];
+let ftIdx=0;
+const ftEl=coreG.append("text").attr("text-anchor","middle").attr("dominant-baseline","central").attr("dy","30px").attr("fill","#C8963E").attr("font-size","8px").attr("letter-spacing","0.15em").attr("opacity",0).text(fadeTexts[0]);
+function cycleFT(){
+  ftEl.transition().duration(700).attr("opacity",0.6)
+    .transition().delay(2000).duration(700).attr("opacity",0)
+    .on("end",()=>{ftIdx=(ftIdx+1)%fadeTexts.length; ftEl.text(fadeTexts[ftIdx]); setTimeout(cycleFT,300);});
+}
+setTimeout(cycleFT,900);
+
+// ═══════════════════════════════════════════════════════════
+//  KNOWLEDGE GRAPH CROSS-LINKS
+// ═══════════════════════════════════════════════════════════
+function renderCrossLinks(){
+  crossG.selectAll("*").remove();
+  if(minMode) return;
+  const bpos={};
+  BRANCHES.forEach((b,i)=>{
+    const a=(i/BRANCHES.length)*2*Math.PI-Math.PI/2;
+    bpos[b.id]={x:BRANCH_R*Math.cos(a),y:BRANCH_R*Math.sin(a),color:b.color};
+  });
+  CROSS_LINKS.forEach(cl=>{
+    const a=bpos[cl.a], b2=bpos[cl.b];
+    if(!a||!b2) return;
+    const mx=(a.x+b2.x)/2*0.3, my=(a.y+b2.y)/2*0.3;
+    crossG.append("path")
+      .attr("d",`M${a.x},${a.y} Q${mx},${my} ${b2.x},${b2.y}`)
+      .attr("fill","none").attr("stroke",a.color).attr("stroke-width",0.6)
+      .attr("stroke-opacity",cl.strength*0.18).attr("stroke-dasharray","2 8");
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════════════════════
+function buildLayout(){
+  const nodes=[],links=[];
+  BRANCHES.forEach((b,bi)=>{
+    const a=(bi/BRANCHES.length)*2*Math.PI-Math.PI/2;
+    const bx=BRANCH_R*Math.cos(a), by=BRANCH_R*Math.sin(a);
+    nodes.push({...b,type:"branch",x:bx,y:by,r:BRANCH_NR,angle:a,branchId:b.id});
+    links.push({sx:0,sy:0,tx:bx,ty:by,color:b.color,id:"lk_"+b.id});
+    if(expandedBranch===b.id){
+      b.kids.forEach((k,ki)=>{
+        const ka=a+(ki-(b.kids.length-1)/2)*(CHILD_SPREAD/b.kids.length);
+        const lx=CHILD_R*Math.cos(ka),ly=CHILD_R*Math.sin(ka);
+        nodes.push({...k,type:"child",x:lx,y:ly,r:CHILD_NR,color:b.color,branchId:b.id,parentX:bx,parentY:by});
+        links.push({sx:bx,sy:by,tx:lx,ty:ly,color:b.color,id:"lk_"+k.id,child:true});
+      });
+    }
+  });
+  return {nodes,links};
+}
+
+function render(anim=true){
+  const {nodes,links}=buildLayout();
+  const dur=anim?450:0;
+
+  // Links
+  const ls=linksG.selectAll(".edge").data(links,d=>d.id);
+  ls.enter().append("path").attr("class","edge").attr("fill","none").attr("stroke",d=>d.color)
+    .attr("stroke-width",d=>d.child?1.3:2).attr("stroke-opacity",0).attr("d",d=>ep(d))
+    .attr("stroke-dasharray",d=>d.child?"4 6":"none")
+    .transition().duration(dur).attr("stroke-opacity",d=>d.child?0.35:0.55);
+  ls.transition().duration(dur).attr("d",d=>ep(d)).attr("stroke-opacity",d=>d.child?0.35:0.55);
+  ls.exit().transition().duration(dur/2).attr("stroke-opacity",0).remove();
+
+  // Halos
+  const hn=nodes.filter(n=>n.type==="branch");
+  const hs=halosG.selectAll(".halo").data(hn,d=>d.id);
+  const he=hs.enter().append("g").attr("class","halo").attr("transform",d=>`translate(${d.x},${d.y})`).attr("opacity",0);
+  he.append("g").attr("class","hcw").append("circle").attr("r",d=>d.r+13).attr("fill","none")
+    .attr("stroke",d=>d.color).attr("stroke-width",0.9).attr("stroke-opacity",0.22).attr("stroke-dasharray","5 10");
+  he.append("g").attr("class","hccw").append("circle").attr("r",d=>d.r+24).attr("fill","none")
+    .attr("stroke",d=>d.color).attr("stroke-width",0.5).attr("stroke-opacity",0.12).attr("stroke-dasharray","3 14");
+  he.transition().duration(dur).attr("opacity",1).attr("transform",d=>`translate(${d.x},${d.y})`);
+  hs.transition().duration(dur).attr("transform",d=>`translate(${d.x},${d.y})`).attr("opacity",1);
+  hs.exit().transition().duration(dur/2).attr("opacity",0).remove();
+
+  // Nodes
+  const ns=nodesG.selectAll(".node-g").data(nodes,d=>d.id);
+  const ne=ns.enter().append("g").attr("class","node-g").attr("transform",d=>`translate(${d.x},${d.y})`).attr("opacity",0).style("cursor","pointer");
+  ne.append("circle").attr("class","node-bg").attr("r",d=>d.r).attr("fill","#04020f")
+    .attr("stroke",d=>d.color).attr("stroke-width",d=>d.type==="branch"?2.2:1.5).attr("filter",d=>GF[d.color]||"none");
+  ne.filter(d=>d.type==="branch").append("text").attr("text-anchor","middle").attr("dominant-baseline","central")
+    .attr("dy","-11px").attr("fill",d=>d.color).attr("font-size","13px").attr("opacity",0.7).text(d=>d.icon);
+  ne.each(function(d){
+    const g=d3.select(this);
+    const lines=d.label.split("\n");
+    const fs=d.type==="branch"?9.5:8.5;
+    const sy=d.type==="branch"?5:0;
+    lines.forEach((ln,i)=>{
+      g.append("text").attr("text-anchor","middle").attr("dominant-baseline","central")
+        .attr("dy",`${sy+(i-(lines.length-1)/2)*(fs+2.5)}px`)
+        .attr("fill",d.type==="branch"?d.color:"#C0B8E0").attr("font-size",`${fs}px`)
+        .attr("font-weight","bold").attr("font-family","Georgia,serif").text(ln);
+    });
+  });
+  ne.transition().duration(dur).attr("opacity",1).attr("transform",d=>`translate(${d.x},${d.y})`);
+  ns.transition().duration(dur).attr("transform",d=>`translate(${d.x},${d.y})`).attr("opacity",1);
+  ns.exit().transition().duration(dur/2).attr("opacity",0).remove();
+
+  nodesG.selectAll(".node-g")
+    .on("click",(e,d)=>{ e.stopPropagation(); onNodeClick(d); })
+    .on("mouseover",(e,d)=>{ showTip(e,d); hov(d3.select(e.currentTarget),d,true); })
+    .on("mousemove",e=>moveTip(e))
+    .on("mouseout",(e,d)=>{ hideTip(); hov(d3.select(e.currentTarget),d,false); });
+
+  renderCrossLinks();
+}
+
+function ep(d){ const mx=(d.sx+d.tx)/2,my=(d.sy+d.ty)/2; return `M${d.sx},${d.sy} Q${mx},${my} ${d.tx},${d.ty}`; }
+function hov(g,d,on){
+  g.select(".node-bg").transition().duration(on?130:200)
+    .attr("r",on?d.r*1.18:d.r)
+    .attr("stroke-width",on?(d.type==="branch"?3.2:2.2):(d.type==="branch"?2.2:1.5));
+}
+
+// ═══════════════════════════════════════════════════════════
+//  NODE CLICK
+// ═══════════════════════════════════════════════════════════
+function onNodeClick(d){
+  if(d.type==="branch"){
+    expandedBranch=expandedBranch===d.id?null:d.id;
+    updateBC(expandedBranch?d:null);
+    closeKCard();
+    render(true);
+    if(aiOpen){ loadAIPanel(d); }
+  } else if(d.type==="child"){
+    selectedNode=d;
+    openKCard(d);
+    pulseCore();
+  }
+}
+
+function pulseCore(){
+  d3.select("#core circle:nth-child(5)").transition().duration(170).attr("r",ROOT_R*1.14).transition().duration(280).attr("r",ROOT_R);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  KNOWLEDGE CARD
+// ═══════════════════════════════════════════════════════════
+function openKCard(d){
+  document.getElementById("kc-tag").textContent=`CHILD — ${(d.branchId||"").toUpperCase()}`;
+  document.getElementById("kc-title").textContent=d.label;
+  document.getElementById("kc-desc").textContent=d.desc||"";
+  document.getElementById("kc-year").textContent=d.year||"—";
+  document.getElementById("kc-civ").textContent=d.civ||"—";
+  const tl=document.getElementById("kc-tl"); tl.innerHTML="";
+  (d.timeline||[]).forEach((ev,i)=>{
+    const item=document.createElement("div"); item.className="kc-tl-item";
+    item.innerHTML=`<div class="kc-tl-dot" style="background:${d.color}"></div><div class="kc-tl-year">${"—"}</div><div class="kc-tl-evt">${ev}</div>`;
+    tl.appendChild(item);
+    if(i<(d.timeline.length-1)){const ln=document.createElement("div"); ln.className="kc-tl-line"; tl.appendChild(ln);}
+  });
+  document.getElementById("kcard").classList.add("open");
+  document.getElementById("kc-ai-btn").onclick=()=>{ openAIPanel(); loadAIPanel(d,"শূন্যের সাথে এর সম্পর্ক ব্যাখ্যা করুন"); };
+}
+function closeKCard(){ document.getElementById("kcard").classList.remove("open"); }
+document.getElementById("kc-close").addEventListener("click",closeKCard);
+
+// ═══════════════════════════════════════════════════════════
+//  AI PANEL
+// ═══════════════════════════════════════════════════════════
+function openAIPanel(){
+  aiOpen=true;
+  document.getElementById("ai-panel").classList.add("open");
+  document.getElementById("btnAI").classList.add("active");
+}
+function closeAIPanel(){
+  aiOpen=false;
+  document.getElementById("ai-panel").classList.remove("open");
+  document.getElementById("btnAI").classList.remove("active");
+}
+document.getElementById("ai-close").addEventListener("click",closeAIPanel);
+document.getElementById("btnAI").addEventListener("click",()=>{ aiOpen?closeAIPanel():openAIPanel(); });
+
+function loadAIPanel(d, autoPrompt=null){
+  aiPanelNode=d;
+  const branch=d.type==="branch"?d:BRANCHES.find(b=>b.id===d.branchId);
+  document.getElementById("ai-tag").textContent=`CLAUDE + ME · ${d.type==="branch"?"BRANCH":"CHILD"}`;
+  document.getElementById("ai-node-name").textContent=d.label+(d.en?` — ${d.en}`:"");
+  document.getElementById("ai-node-meta").textContent=d.desc?d.desc.slice(0,60)+"…":"";
+  document.getElementById("ai-year").textContent=d.year||"—";
+  document.getElementById("ai-civ").textContent=d.civ||"—";
+  document.getElementById("ai-type-val").textContent=d.type==="branch"?"মূল শাখা":"উপ-নোড";
+
+  // Prompts
+  const pills=document.getElementById("ai-pills"); pills.innerHTML="";
+  const prompts=branch?.aiPrompts||["শূন্যের সাথে সম্পর্ক?","ঐতিহাসিক প্রভাব?","আধুনিক প্রাসঙ্গিকতা?"];
+  prompts.forEach(pr=>{
+    const p=document.createElement("div"); p.className="ai-pill"; p.textContent=pr;
+    p.addEventListener("click",()=>{ document.querySelectorAll(".ai-pill").forEach(x=>x.classList.remove("active")); p.classList.add("active"); callClaude(d,pr); });
+    pills.appendChild(p);
+  });
+
+  // Connections
+  const connList=document.getElementById("ai-conn-list"); connList.innerHTML="";
+  (branch?.connections||[]).forEach(conn=>{
+    const br=BRANCHES.find(b=>b.id===conn.id);
+    if(!br) return;
+    const item=document.createElement("div"); item.className="aic-item";
+    item.innerHTML=`<div style="width:7px;height:7px;border-radius:50%;background:${br.color};flex-shrink:0"></div><div style="font-size:11px;color:#7B6FA0">${br.label} — ${br.en}</div><div style="font-size:9px;color:#3d2b6a;margin-left:auto;font-style:italic">${conn.rel}</div>`;
+    item.addEventListener("click",()=>{ expandedBranch=br.id; updateBC(br); render(true); });
+    connList.appendChild(item);
+  });
+
+  resetAIResponse();
+  if(autoPrompt) callClaude(d,autoPrompt);
+}
+
+function resetAIResponse(){
+  document.getElementById("ai-idle").style.display="block";
+  document.getElementById("ai-loading").style.display="none";
+  document.getElementById("ai-response").style.display="none";
+}
+
+async function callClaude(d, prompt){
+  document.getElementById("ai-idle").style.display="none";
+  document.getElementById("ai-loading").style.display="flex";
+  document.getElementById("ai-response").style.display="none";
+
+  const branch=d.type==="branch"?d:BRANCHES.find(b=>b.id===d.branchId);
+  const context=`আমি ZERO (শূন্য) বইয়ের একটি ইন্টারঅ্যাক্টিভ মাইন্ডম্যাপ দেখছি। নোড: "${d.label}" (${d.en||""})। শাখা: ${branch?.label||""} — ${branch?.en||""}। সময়: ${d.year||""}। সভ্যতা: ${d.civ||""}। বর্ণনা: ${d.desc||""}।`;
+  const fullPrompt=`${context}\n\nপ্রশ্ন: ${prompt}\n\nউত্তর দিন বাংলায়, সংক্ষেপে (৮০-১২০ শব্দ)। তথ্যভিত্তিক, প্রাণবন্ত, কিন্তু সংকুচিত।`;
+
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:1000,
+        messages:[{role:"user",content:fullPrompt}]
+      })
+    });
+    const data=await res.json();
+    const text=data.content?.find(c=>c.type==="text")?.text||"উত্তর পাওয়া যায়নি।";
+    document.getElementById("ai-loading").style.display="none";
+    document.getElementById("ai-response").style.display="block";
+    document.getElementById("ai-response").textContent=text;
+  } catch(err){
+    document.getElementById("ai-loading").style.display="none";
+    document.getElementById("ai-response").style.display="block";
+    document.getElementById("ai-response").innerHTML=`<span class="air-error">⚠ Claude সংযুক্ত হতে পারেনি। Claude.ai-তে খুলুন।</span>`;
+  }
+}
+
+// Ask bar
+document.getElementById("ai-ask-btn").addEventListener("click",()=>{
+  const v=document.getElementById("ai-ask-input").value.trim();
+  if(v && aiPanelNode){ callClaude(aiPanelNode,v); document.getElementById("ai-ask-input").value=""; }
+});
+document.getElementById("ai-ask-input").addEventListener("keydown",e=>{
+  if(e.key==="Enter"){ document.getElementById("ai-ask-btn").click(); }
+});
+
+// ═══════════════════════════════════════════════════════════
+//  TOOLTIP
+// ═══════════════════════════════════════════════════════════
+const tipEl=document.getElementById("tip");
+function showTip(e,d){
+  document.getElementById("tip-type").textContent=d.type==="branch"?"MAIN NODE":"CHILD NODE";
+  document.getElementById("tip-name").textContent=d.en?`${d.label} — ${d.en}`:d.label;
+  document.getElementById("tip-hint").textContent=d.desc?(d.desc.slice(0,70)+"…"):"";
+  document.getElementById("tip-cta").textContent=d.type==="branch"?(expandedBranch===d.id?"ক্লিক: বন্ধ করুন":"ক্লিক: খুলুন →"):"ক্লিক: বিস্তারিত →";
+  tipEl.classList.add("show"); moveTip(e);
+}
+function moveTip(e){ tipEl.style.left=Math.min(e.clientX+16,W-220)+"px"; tipEl.style.top=Math.max(e.clientY-12,65)+"px"; }
+function hideTip(){ tipEl.classList.remove("show"); }
+
+// ═══════════════════════════════════════════════════════════
+//  BREADCRUMB
+// ═══════════════════════════════════════════════════════════
+function updateBC(branch){
+  const bc=document.getElementById("breadcrumb");
+  if(!branch){ bc.innerHTML=`<span class="bc on" id="bc-root">০ ZERO</span>`; }
+  else{
+    bc.innerHTML=`<span class="bc" id="bc-root">০ ZERO</span><span class="bcs">›</span><span class="bc on">${branch.label}</span>`;
+    document.getElementById("bc-root").addEventListener("click",()=>{ expandedBranch=null; updateBC(null); closeKCard(); render(true); resetView(); });
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  TIMELINE
+// ═══════════════════════════════════════════════════════════
+function buildTL(){
+  const bar=document.getElementById("tl-bar"); bar.innerHTML="";
+  TIMELINE_EVENTS.forEach((ev,i)=>{
+    const item=document.createElement("div"); item.className="tl-ev";
+    item.innerHTML=`<div class="tl-dot" style="background:${ev.color}"></div><div class="tl-yr">${ev.year}</div><div class="tl-nm">${ev.label}</div>`;
+    item.addEventListener("click",()=>{
+      const br=BRANCHES.find(b=>b.id===ev.branchId);
+      if(br){ expandedBranch=br.id; updateBC(br); render(true);
+        const kid=br.kids.find(k=>k.id===ev.kidId);
+        if(kid) setTimeout(()=>{ kid.color=br.color; kid.branchId=br.id; openKCard(kid); },500); }
+    });
+    bar.appendChild(item);
+    if(i<TIMELINE_EVENTS.length-1){ const l=document.createElement("div"); l.className="tl-ln"; bar.appendChild(l); }
+  });
+}
+buildTL();
+
+document.getElementById("btnTL").addEventListener("click",()=>{
+  tlOpen=!tlOpen;
+  document.getElementById("tl-bar").classList.toggle("show",tlOpen);
+  document.getElementById("btnTL").classList.toggle("active",tlOpen);
+});
+
+// ═══════════════════════════════════════════════════════════
+//  STORY / MINIMAL
+// ═══════════════════════════════════════════════════════════
+document.getElementById("btnStory").addEventListener("click",()=>{
+  storyOpen=!storyOpen;
+  const s=document.getElementById("story");
+  s.style.display="block"; s.classList.toggle("open",storyOpen);
+  document.getElementById("btnStory").classList.toggle("active",storyOpen);
+  if(!storyOpen) setTimeout(()=>{ if(!storyOpen) s.style.display="none"; },400);
+});
+
+document.getElementById("btnMin").addEventListener("click",()=>{
+  minMode=!minMode;
+  starsG.attr("opacity",minMode?0.15:1);
+  geoG.attr("opacity",minMode?0.08:1);
+  crossG.attr("opacity",minMode?0:1);
+  document.getElementById("btnMin").classList.toggle("active",minMode);
+});
+
+// ═══════════════════════════════════════════════════════════
+//  ZOOM & PAN
+// ═══════════════════════════════════════════════════════════
+const zoom=d3.zoom().scaleExtent([0.15,4])
+  .on("zoom",e=>{
+    currentTx=e.transform;
+    rootG.attr("transform",`translate(${e.transform.x+W/2},${e.transform.y+H/2}) scale(${e.transform.k})`);
+  });
+svg.call(zoom);
+
+function resetView(){
+  svg.transition().duration(700).call(zoom.transform,d3.zoomIdentity.scale(0.88));
+}
+document.getElementById("btnReset").addEventListener("click",()=>{ expandedBranch=null; updateBC(null); closeKCard(); render(true); resetView(); });
+document.getElementById("hZoomIn").addEventListener("click",()=>svg.transition().duration(260).call(zoom.scaleBy,1.35));
+document.getElementById("hZoomOut").addEventListener("click",()=>svg.transition().duration(260).call(zoom.scaleBy,0.75));
+svg.on("click",()=>{ if(expandedBranch){ expandedBranch=null; updateBC(null); closeKCard(); render(true); } });
+
+// ═══════════════════════════════════════════════════════════
+//  EXPORT PNG
+// ═══════════════════════════════════════════════════════════
+document.getElementById("btnPNG").addEventListener("click",()=>{
+  const se=document.getElementById("canvas");
+  const s=new XMLSerializer(), str=s.serializeToString(se);
+  const c=document.createElement("canvas"); c.width=W*2; c.height=H*2;
+  const ct=c.getContext("2d"); ct.scale(2,2); ct.fillStyle="#010009"; ct.fillRect(0,0,W,H);
+  const img=new Image();
+  img.onload=()=>{ ct.drawImage(img,0,0,W,H); const a=document.createElement("a"); a.download="zero-v5.png"; a.href=c.toDataURL("image/png"); a.click(); };
+  img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(str);
+});
+
+// ═══════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════
+rootG.attr("transform",`translate(${W/2},${H/2}) scale(0.88)`);
+render(false);
+setTimeout(()=>{
+  const ld=document.getElementById("loading");
+  ld.style.opacity="0"; setTimeout(()=>ld.remove(),950);
+},1200);
+</script>
+</body>
+</html>
