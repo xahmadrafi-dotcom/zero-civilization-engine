@@ -1,1 +1,4 @@
-(the full markdown content of rooh-notebook-v2.md as provided)
+# Rooh Notebook v2 Architecture
+
+<!-- Markdown content goes here -->
+
