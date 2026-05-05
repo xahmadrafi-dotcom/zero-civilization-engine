@@ -4,8 +4,8 @@ title: Cosmic Human Unity — A Journey from Division to Oneness
 date_created: 2026-05
 phase: 00_The_Roots
 linked_modules: [linguAI, vocalAI, emotionAI, cosmicAI]
-m99_arc: Chapter 01 (Origin) × Chapter 03 (Rising) × Chapter 04 (Unity)
-frequency: 432Hz (Cosmic Unity & Human Oneness)
+m99_arc: Chapter 01 (Origin) x Chapter 03 (Rising) x Chapter 04 (Unity)
+frequency: 432Hz (Cosmic Unity and Human Oneness)
 languages: [Bengali, English, Arabic, Sanskrit, Spanish]
 genre: Ambient World Fusion, Cinematic, Spiritual
 duration: 36:00
@@ -13,44 +13,44 @@ tracks: 12
 ---
 
 # Cosmic Human Unity
-**M99 Universe Document — Root Protocol**
-> M99 Note: এই প্রোজেক্ট কোনো একক সংস্কৃতির গান নয় — এটি মানবজাতির সম্মিলিত কণ্ঠস্বর। বিভাজন থেকে ঐক্যের দিকে যাত্রা। ঌ ৶
+M99 Universe Document — Root Protocol
+M99 Note: এই প্রোজেক্ট কোনো একক সংস্কৃতির গান নয় — এটি মানবজাতির সম্মিলিত কণ্ঠস্বর। বিভাজন থেকে ঐক্যের দিকে যাত্রা। ঌ ৶
 
 ---
 
 ## প্রোজেক্ট ওভারভিউ
 
-- নাম: Cosmic Human Unity
-- সাবটাইটেল: A Journey from Division to Oneness
-- সময়কাল: 35���36 মিনিট
-- ঘরানা: Ambient World Fusion, Cinematic, Spiritual
-- থিম: মানবতার ঐক্য, মহাজাগতিক সংযোগ, আধ্যাত্মিক জাগরণ
-- ভাষা: বাংলা, ইংরেজি, আরবি, সংস্কৃত, স্প্যানিশ
+নাম: Cosmic Human Unity
+সাবটাইটেল: A Journey from Division to Oneness
+সময়কাল: 35-36 মিনিট
+ঘরানা: Ambient World Fusion, Cinematic, Spiritual
+থিম: মানবতার ঐক্য, মহাজাগতিক সংযোগ, আধ্যাত্মিক জাগরণ
+ভাষা: বাংলা, ইংরেজি, আরবি, সংস্কৃত, স্প্যানিশ
 
 ---
 
 ## তিন-পর্বের কাঠামো
 
-### পর্ব ১: বিভাজন (0:00–10:00)
+পর্ব ১: বিভাজন (0:00 - 10:00)
 - Track 1: The Call (0:45)
 - Track 2: The Divide (3:15)
 - Track 3: The Spark (3:15)
-মুড: দুঃখ → আশা
+mুড: দুঃখ → আশা
 
-### পর্ব ২: যাত্রা (10:00–23:00)
+পর্ব ২: যাত্রা (10:00 - 23:00)
 - Track 4: The Journey (3:30)
 - Track 5: The Light (3:30)
 - Track 6: The Unity (3:30)
 - Track 7: The Return (3:00)
 - Track 8: The Silence (3:00)
-মুড: অনুসন্ধান → আবিষ্কার → উদযাপন
+mুড: অনুসন্ধান → আবিষ্কার → উদযাপন
 
-### পর্ব ৩: ঐক্য (23:00–36:00)
+পর্ব ৩: ঐক্য (23:00 - 36:00)
 - Track 9: The Echo (3:00)
 - Track 10: The Promise (3:00)
 - Track 11: The Unity Reprise (4:00)
 - Track 12: Outro — The Light Returns (3:00)
-মুড: স্মৃতি → প্রতিশ্রুতি → মহিমা
+mুড: স্মৃতি → প্রতিশ্রুতি → মহিমা
 
 ---
 
@@ -117,7 +117,6 @@ From east to west / পূর্ব থেকে পশ্চিম
 
 [Final Chorus]
 আমরা যাত্রীরা / We are travelers
-আমরা অনুসন্ধানকারীরা / We are seekers
 আমরা স্বপ্নদ্রষ্টারা / We are dreamers
 একসাথে / Together
 
@@ -165,4 +164,4 @@ Flute + Saxophone + Didgeridoo
 
 ---
 
-**End of Transmission.** ঌ ৶
+End of Transmission. ঌ ৶
