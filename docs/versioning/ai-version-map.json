@@ -1,0 +1,64 @@
+{
+  "structured_schema": {
+    "name": "ai_version_map",
+    "version": "ঐ ০.০২",
+    "required_fields": [
+      "policy_version",
+      "documents",
+      "last_updated"
+    ],
+    "field_definitions": {
+      "policy_version": "string",
+      "documents": "array",
+      "last_updated": "date"
+    }
+  },
+  "sample_instance": {
+    "policy_version": "ঐ ০.০২",
+    "last_updated": "2026-06-24",
+    "documents": [
+      {
+        "file": "docs/architecture/context-injection-spec.md",
+        "version": "ঐ ০.০২"
+      },
+      {
+        "file": "docs/architecture/context-injection-spec.yaml",
+        "version": "ঐ ০.০২"
+      },
+      {
+        "file": "docs/architecture/context-injection-spec.json",
+        "version": "ঐ ০.০২"
+      },
+      {
+        "file": "docs/metadata/metadata-system-guide.md",
+        "version": "ঐ ০.০২"
+      },
+      {
+        "file": "docs/metadata/metadata-templates.yaml",
+        "version": "ঐ ০.০২"
+      },
+      {
+        "file": "docs/metadata/metadata-templates.json",
+        "version": "ঐ ০.০২"
+      },
+      {
+        "file": "docs/versioning/ai-versioning-policy.md",
+        "version": "ঐ ০.০২"
+      },
+      {
+        "file": "docs/versioning/ai-version-map.yaml",
+        "version": "ঐ ০.০২"
+      },
+      {
+        "file": "docs/versioning/ai-version-map.json",
+        "version": "ঐ ০.০২"
+      }
+    ]
+  },
+  "validation_hints": [
+    "every file entry must include file and version",
+    "version must start with ঐ",
+    "last_updated must use YYYY-MM-DD",
+    "duplicate file values are not allowed"
+  ]
+}

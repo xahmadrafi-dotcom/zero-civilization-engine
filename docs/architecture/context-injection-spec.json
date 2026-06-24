@@ -1,0 +1,56 @@
+{
+  "structured_schema": {
+    "name": "context_injection_spec",
+    "version": "ঐ ০.০২",
+    "required_fields": [
+      "project_id",
+      "source_documents",
+      "context_blocks",
+      "injection_order",
+      "risk_flags",
+      "version_tag"
+    ],
+    "field_definitions": {
+      "project_id": "string",
+      "source_documents": "array",
+      "context_blocks": "array",
+      "injection_order": "array",
+      "risk_flags": "array",
+      "version_tag": "string"
+    }
+  },
+  "sample_instance": {
+    "project_id": "M99",
+    "source_documents": [
+      "00-SESSIONS/2026-05--claude-ajgan-zero-jagaran-mega-session.md",
+      "data/m99-memory-core.json"
+    ],
+    "context_blocks": [
+      {
+        "id": "session_summary",
+        "priority": "high",
+        "content_type": "narrative"
+      },
+      {
+        "id": "memory_core",
+        "priority": "high",
+        "content_type": "structured"
+      }
+    ],
+    "injection_order": [
+      "session_summary",
+      "memory_core"
+    ],
+    "risk_flags": [
+      "incomplete_source",
+      "outdated_version"
+    ],
+    "version_tag": "ঐ ০.০২"
+  },
+  "validation_hints": [
+    "source_documents length must be 2 or more",
+    "context_blocks ids must be unique",
+    "injection_order values must match context_blocks ids",
+    "version_tag must start with ঐ"
+  ]
+}
