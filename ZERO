@@ -1,0 +1,60 @@
+ঐ সংস্করণ ০.০০
+---
+
+{
+  "node": "Zero",
+  "children": [
+    {
+      "node": "Ancient Civilizations",
+      "children": [
+        {"node":"Mohenjo-Daro urban grid","visual_hint":"aerial sepia to cosmic blue overlay"},
+        {"node":"Harappa sanitation","visual_hint":"brick grid close-up"},
+        {"node":"river changes theory","visual_hint":"faded river path overlay"},
+        {"node":"trade networks","visual_hint":"map lines to Mesopotamia"},
+        {"node":"undeciphered script","visual_hint":"seal glyphs"},
+        {"node":"archaeological evidence","visual_hint":"stratigraphy cross-section"}
+      ],
+      "visual_hint":"earthy tones blending into nebula"
+    },
+    {
+      "node":"Mathematical History",
+      "children":[
+        {"node":"Aryabhata references","visual_hint":"manuscript marginalia"},
+        {"node":"Brahmagupta rules","visual_hint":"equation glyphs"},
+        {"node":"Bakhshali manuscript","visual_hint":"dot/placeholder symbol"},
+        {"node":"positional decimal","visual_hint":"place-value diagram"},
+        {"node":"zero symbol evolution","visual_hint":"glyph timeline"},
+        {"node":"transmission to Arabia/Europe","visual_hint":"trade-route arrows"}
+      ],
+      "visual_hint":"parchment textures with golden ink"
+    },
+    {
+      "node":"Technological Applications",
+      "children":[
+        {"node":"binary logic","visual_hint":"0/1 streams"},
+        {"node":"computing architecture","visual_hint":"circuit morph"},
+        {"node":"AI algorithms","visual_hint":"neural net overlay"},
+        {"node":"banking ledgers","visual_hint":"digital ledger glyphs"},
+        {"node":"cryptography","visual_hint":"lock + binary"},
+        {"node":"education tools","visual_hint":"interactive storyboard"}
+      ],
+      "visual_hint":"cool tech blues with gold accents"
+    },
+    {
+      "node":"Manifesto",
+      "children":[
+        {"node":"vision","visual_hint":"central tagline"},
+        {"node":"core beliefs","visual_hint":"icon set"},
+        {"node":"commitments","visual_hint":"checklist glyphs"},
+        {"node":"3-year goals","visual_hint":"timeline bar"},
+        {"node":"community actions","visual_hint":"workshop icon"},
+        {"node":"open-source pledge","visual_hint":"code bracket glyph"}
+      ],
+      "visual_hint":"vertical manifesto strip on right"
+    }
+  ],
+  "visual_hint":"central glowing Zero with radial streams"
+}
+
+
+
