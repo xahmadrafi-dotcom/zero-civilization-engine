@@ -1,152 +1,92 @@
-# ZERO ০ — Civilization Engine
+### 🌌 প্রকল্পের পরিচিতি
+**শূন্যকেন্দ্রিক সভ্যতা ইঞ্জিন** হলো একটি ইন্টারঅ্যাকটিভ ভিজ্যুয়াল নলেজ ইঞ্জিন। এটি গণিত, দর্শন, প্রযুক্তি এবং ইতিহাসে 'শূন্য' ধারণার উৎস, বিস্তার এবং মানবসভ্যতায় এর প্রভাবকে একত্রিত করে উপস্থাপন করে। এটি মূলত একটি জ্ঞান গ্রাফের মাধ্যমে ৬টি প্রধান শাখা এবং ৩৬টি সংযুক্ত নোডকে কেন্দ্র করে কাজ করে।
 
-শূন্যকে কেন্দ্র করে মানবসভ্যতার জ্ঞান-মানচিত্র। গণিত, দর্শন, প্রযুক্তি ও ইতিহাসে শূন্যের উৎস, বিস্তার ও প্রভাবকে একটি ইন্টারঅ্যাকটিভ ভিজ্যুয়াল নলেজ ইঞ্জিনে উপস্থাপন।
+### ✨ মূল বৈশিষ্ট্যসমূহ
+১. **ইন্টারঅ্যাকটিভ জ্ঞান গ্রাফ:** শূন্যকে কেন্দ্র করে ৬টি প্রধান শাখা এবং ৩৬টি সংযুক্ত জ্ঞান নোড একসাথে দেখা যায়।
+২. **D3.js ভিজ্যুয়ালাইজেশন:** ফোর্স-ডাইরেক্টেড গ্রাফ, অ্যানিমেটেড SVG নোড, ক্রস-লিঙ্ক এবং জ্যামিতিক ওভারলে ব্যবহার করা হয়েছে।
+৩. **এআই এক্সপ্লোরার (AI Explorer):** গ্রাফের যেকোনো কনসেপ্ট সম্পর্কে প্রসঙ্গভিত্তিক প্রশ্ন-উত্তরের জন্য এখানে ক্লড (Claude) এআই প্যানেল অন্তর্ভুক্ত।
+৪. **ঐতিহাসিক টাইমলাইন:** পিঙ্গলা (খ্রিস্টপূর্ব ৩০০) থেকে ২০৩৮ সমস্যা পর্যন্ত ১০টি প্রধান ঘটনা অন্তর্ভুক্ত।
+৫. **স্টোরি মোড:** শূন্যের ভূমিকা সম্পর্কে দার্শনিক প্রসঙ্গে একটি ন্যারেশন প্যানেল।
+৬. **পার্টিকেল ইফেক্টস:** জ্ঞান নোডগুলোর মধ্যে প্রবাহিত ক্যানভাস-ভিত্তিক অ্যানিমেটেড পার্টিকেল।
+৭. **PNG এক্সপোর্ট:** বর্তমান ভিজ্যুয়ালাইজেশনটি উচ্চ-রেজোলিউশন PNG হিসেবে ডাউনলোড করার সুযোগ।
+৮. **রেসপন্সিভ ডিজাইন:** টাচ-এনাবলড জুম ও প্যান ফিচার, যা ডেস্কটপ ও মোবাইলে কাজ করে।
 
-An interactive visual knowledge engine exploring the origin, spread, and impact of **zero** across mathematics, philosophy, technology, and history.
+### 🌿 জ্ঞান শাখা ও বিষয়বস্তু
+প্রকল্পটি ৬টি প্রধান শাখায় বিভক্ত:
 
----
+| শাখা (Branch) | বাংলা নাম | বিষয়বস্তু (Topics) |
+| :--- | :--- | :--- |
+| **গণিত** | Mathematics | বাখশালি পাণ্ডুলিপি, আর্্যভট্ট, ব্রহ্মগুপ্ত, স্থানীয় মান, ক্যালকুলাস, বাইনারি |
+| **চেতনা** | Consciousness | বৌদ্ধ শূন্যতা, বেদান্তিক শূন্য, জৈন অনন্ত, সুফি ফানা, ধ্যান, কোয়ান্টাম শূন্য |
+| **সভ্যতা** | Civilization | সিংহু উপত্যকা, ভারতীয় উৎস, আরবীয় প্রেরণ, ইউরোপীয় বিস্তার, উপনিবেশিক ঋণস্মৃতি, পুনরুদ্ধার |
+| **প্রযুক্তি** | Technology | বাইনারি ০/১, কম্পিউটিং, এআই, ব্যাংকিং, IEEE ৭৫৪, ২০৩৮ সমস্যা |
+| **ভাষা** | Language | সংস্কৃত শূন্য, আরবি etymology, বাঙালি ০, গ্লিফ বিবর্তন, পিঙ্গলার ছন্দ, ডিজিটাল কোড |
+| **সৃষ্টি** | Creation | বিগ ব্যাং, কোয়ান্টাম ভ্যাকুয়াম, ফিবোনাকি, পবিত্র জ্যামিতি, কুরআন ৯৪:৭, ম্যানিফেস্টো |
 
-## Features
+### 🚀 প্রাথমিক ধাপ (Getting Started)
+**প্রয়োজনীয়তা:**
+*   একটি আধুনিক ওয়েব ব্রাউজার (Chrome, Firefox, Safari, বা Edge)।
+*   কোনো বিল্ড টুল, প্যাকেজ ম্যানেজার বা ইনস্টলেশনের প্রয়োজন নেই।
 
-- **Interactive Knowledge Graph** — Explore 6 main branches with 36 interconnected knowledge nodes centered around zero
-- **D3.js Visualization** — Force-directed graph with animated SVG nodes, cross-links, and geometric overlays
-- **AI Explorer** — Built-in Claude AI panel for contextual Q&A about any concept in the graph
-- **Historical Timeline** — 10 major milestones from Pingala (~300 BCE) to the 2038 Problem
-- **Story Mode** — Narrative panel with philosophical context about zero's role in civilization
-- **Particle Effects** — Canvas-based animated particles flowing between knowledge nodes
-- **PNG Export** — Download the current visualization as a high-resolution PNG image
-- **Responsive** — Touch-enabled zoom and pan, works on desktop and mobile
+**স্থানীয়ভাবে চালানোর পদ্ধতি:**
+*   **পদ্ধতি ১:** সরাসরি ওপেন করুন: `index.html` ফাইলটি ব্রাউজারে ওপেন করুন।
+    *   macOS: `xdg-open index.html`
+    *   Linux: `xdg-open index.html`
+    *   Windows: `start index.html`
+*   **পদ্ধতি ২:** লোকাল এইচটিটিপি সার্ভার (এআই ফিচারের জন্য সুপারিশকৃত):
+    *   Python 3: `python -m http.server 8000`
+    *   Node.js: `npx http-server -p 8000`
+    *   এরপর ব্রাউজারে `http://localhost:8000` ভিজিট করুন।
 
-## Knowledge Branches
+**GitHub Pages-এ ডেপ্লয় করুন:**
+*   `index.html` ফাইলটি `main` ব্রাঞ্চে পুশ করুন।
+*   `Settings → Pages` গিয়ে সোর্স হিসেবে `main` ব্রাঞ্চ নির্বাচন করুন।
+*   সাইটটি লাইভ হবে: `https://<username>.github.io/zero-civilization-engine/`
 
-| Branch | বাংলা | Topics |
-|--------|-------|--------|
-| **Mathematics** | গণিত | Bakhshali Manuscript, Aryabhata, Brahmagupta, Place Value, Calculus, Binary |
-| **Consciousness** | চেতনা | Buddhist Śūnyatā, Vedantic Zero, Jain Infinity, Sufi Fanā, Meditation, Quantum Zero |
-| **Civilization** | সভ্যতা | Indus Valley, Indian Origin, Arab Transmission, European Spread, Colonial Erasure, Reclamation |
-| **Technology** | প্রযুক্তি | Binary 0/1, Computing, AI, Banking, IEEE 754, 2038 Problem |
-| **Language** | ভাষা | Sanskrit Śūnya, Arabic Etymology, Bengali ০, Glyph Evolution, Pingala's Meters, Digital Codes |
-| **Creation** | সৃষ্টি | Big Bang, Quantum Vacuum, Fibonacci, Sacred Geometry, Quran 94:7, Manifesto |
+### 📖 ব্যবহার নির্দেশিকা (Usage Guide)
+**নেভিগেশন:**
+*   **ক্যানভাস ঘোরানো:** ডেস্কটপে ক্লিক ও টানুন, মোবাইলে স্পর্শ ও টানুন।
+*   **জুম ইন/আউট:** ডেস্কটপে স্ক্রল ওয়েল, মোবাইলে পিঞ্চ গেসচার।
+*   **শাখা নির্বাচন:** শাখা নোডে ক্লিক বা ট্যাপ করুন।
+*   **বিবরণ দেখা:** চাইল্ড নোডে ক্লিক করুন।
+*   **রিসেট:** `⟳ Reset` বাটনে ক্লিক করুন।
 
-## Getting Started
+**টুলবার বাটনসমূহ:**
+*   `✦ AI Explorer`: প্রসঙ্গভিত্তিক বিশ্লেষণের জন্য ক্লড এআই সাইড প্যানেল ওপেন করে।
+*   `⏱ Timeline`: ১০টি ঐতিহাসিক ঘটনার একটি অনুভূমিক বার প্রদর্শন করে।
+*   `◈ Story`: শূন্যের দার্শনিক গুরুত্ব সম্পর্কে একটি ন্যারেশন প্যানেল ওপেন করে।
+*   `◎ Minimal`: সজ্জিত দৃশ্যপট বন্ধ করে মিনিমাল মোড টগল করে।
+*   `⟳ Reset`: জুম রিসেট করে এবং সকল নির্বাচন পরিষ্কার করে।
+*   `↓ PNG`: বর্তমান দৃশ্যটি ২× রেজোলিউশনের PNG হিসেবে এক্সপোর্ট করে।
 
-### Prerequisites
+**এআই এক্সপ্লোরার প্যানেল:**
+*   যেকোনো নোডে ক্লিক করে এটি সিলেক্ট করুন।
+*   `✦ AI Explorer` ক্লিক করুন।
+*   প্রি-লিখিত প্রশ্নের পিল বা কাস্টম প্রশ্ন ব্যবহার করুন।
+*   সংযুক্ত নোড এবং তাদের সম্পর্ক প্রদর্শিত হয়।
+*   **নোট:** এআই এক্সপ্লোরার এন্ট্রোপিক API-তে রিকোয়েস্ট করে। ব্রাউজার সরাসরি ক্রস-অরিজিন রিকোয়েস্ট ব্লক করে, তাই একটি সার্ভার-সাইড প্রক্সি প্রয়োজন।
 
-- A modern web browser (Chrome, Firefox, Safari, or Edge)
-- No build tools, package managers, or installation required
+### 💻 প্রযুক্তিগত স্ট্যাক (Technology Stack)
+*   **D3.js v7:** SVG-ভিত্তিক ডেটা ভিজ্যুয়ালাইজেশন এবং ফোর্স-ডাইরেক্টেড লেআউট।
+*   **HTML5 Canvas:** পার্টিকেল ইফেক্ট সিস্টেম।
+*   **CSS3:** অ্যানিমেশন, ট্রানজিশন এবং ডার্ক থিম স্টাইলিং।
+*   **Vanilla JavaScript (ES6+):** অ্যাপ্লিকেশন লজিক, কোনো বিল্ড স্টেপ ছাড়াই।
 
-### Run Locally
+### 🛠 কাস্টমাইজেশন
+পুরো অ্যাপ্লিকেশনটি একটি মাত্র `index.html` ফাইলে অন্তর্ভুক্ত।
+*   **শাখা ডেটা:** `BRANCHES` অ্যারে থেকে নতুন শাখা যোগ বা বিদ্যমান শাখা এডিট করুন।
+*   **টাইমলাইন ইভেন্টস:** `TIMELINE_EVENTS` অ্যারে থেকে ঐতিহাসিক টাইমলাইন পরিবর্তন করুন।
+*   **ক্রস-লিঙ্ক:** `CROSS_LINKS` অ্যারে থেকে শাখাগুলোর মধ্যে সংযোগ পরিবর্তন করুন।
+*   **রঙ:** প্রতিটি শাখার `color` ফিল্ডে হেক্স কালার পরিবর্তন করুন।
+*   **লেআউট:** `BRANCH_R`, `CHILD_R` কনস্ট্যান্ট ব্যবহার করে নোড পজিশনিং অ্যাডজাস্ট করুন।
+*   **এআই মডেল:** `callClaude()` ফাংশনে `model` ফিল্ড পরিবর্তন করুন (ডিফল্ট: `claude-sonnet-4-20250514`)।
+*   **ভাষা:** `<html>` ট্যাগের `lang="bn"` পরিবর্তন করে ভাষা পরিবর্তন করা যায়।
 
-**Option 1 — Open directly:**
+### 🌐 ব্রাউজার সামঞ্জস্যতা
+*   ✅ Chrome / Edge ৭০+
+*   ✅ Firefox ৬০+
+*   ✅ Safari ১২+
+*   ✅ Mobile Safari / Chrome (টাচ-এনাবলড)
+*   ❌ IE ১১
 
-```bash
-# Simply open index.html in your browser
-open index.html          # macOS
-xdg-open index.html      # Linux
-start index.html         # Windows
-```
-
-**Option 2 — Local HTTP server (recommended for AI features):**
-
-```bash
-# Python 3
-python -m http.server 8000
-
-# Node.js
-npx http-server -p 8000
-```
-
-Then visit `http://localhost:8000` in your browser.
-
-### Deploy to GitHub Pages
-
-1. Push `index.html` to the `main` branch
-2. Go to **Settings → Pages** and set the source to the `main` branch
-3. Your site will be available at `https://<username>.github.io/zero-civilization-engine/`
-
-## Usage Guide
-
-### Navigation
-
-| Action | Desktop | Mobile |
-|--------|---------|--------|
-| Pan the canvas | Click and drag | Touch and drag |
-| Zoom in/out | Scroll wheel | Pinch gesture |
-| Select a branch | Click a branch node | Tap a branch node |
-| View child node details | Click a child node | Tap a child node |
-| Return to overview | Click the `⟳ Reset` button or the breadcrumb | Tap `⟳ Reset` |
-
-### Toolbar Buttons
-
-| Button | Function |
-|--------|----------|
-| `✦ AI Explorer` | Opens the Claude AI side panel for contextual analysis |
-| `⏱ Timeline` | Displays a horizontal bar of 10 major historical events |
-| `◈ Story` | Opens a narrative panel about zero's philosophical significance |
-| `◎ Minimal` | Toggles minimal mode (hides decorative visual effects) |
-| `⟳ Reset` | Resets zoom and clears all selections |
-| `↓ PNG` | Exports the current view as a 2× resolution PNG image |
-
-### AI Explorer Panel
-
-The AI Explorer panel uses Claude to provide context-aware analysis of any selected node:
-
-1. Click a branch or child node to select it
-2. Click `✦ AI Explorer` to open the panel
-3. Use the **pre-written prompt pills** or type a custom question
-4. The panel also shows connected nodes with their relationships
-
-> **Note:** The AI Explorer makes requests to the Anthropic API (`https://api.anthropic.com/v1/messages`). Browsers block direct cross-origin requests to this endpoint, so you need a server-side proxy that forwards requests and attaches your Anthropic API key. A minimal example using Node.js:
->
-> ```bash
-> npx cors-anywhere          # or any reverse proxy
-> ```
->
-> Alternatively, deploy a small proxy (e.g., a Cloudflare Worker or an Express middleware) that receives requests from the frontend, adds the `x-api-key` and `anthropic-version` headers, and forwards them to `https://api.anthropic.com/v1/messages`.
-
-### Knowledge Card
-
-When you click a child node, a knowledge card appears at the bottom of the screen showing:
-
-- Node title, description, time period, and civilization
-- A mini-timeline of related historical events
-- An **AI বিশ্লেষণ** (AI Analysis) button to send the topic to the AI Explorer
-
-### Zoom Controls
-
-Use the `+` / `−` buttons in the bottom-right corner, or scroll/pinch to zoom.
-
-## Technology Stack
-
-- **[D3.js v7](https://d3js.org/)** — SVG-based data visualization and force-directed layouts
-- **HTML5 Canvas** — Particle effects system
-- **CSS3** — Animations, transitions, and dark theme styling
-- **Vanilla JavaScript (ES6+)** — Application logic, no build step required
-
-## Customization
-
-The entire application is contained in a single `index.html` file. Key areas to customize:
-
-| What | Where | Description |
-|------|-------|-------------|
-| **Branch data** | `BRANCHES` array | Add/edit knowledge branches and child nodes |
-| **Timeline events** | `TIMELINE_EVENTS` array | Modify the historical timeline |
-| **Cross-links** | `CROSS_LINKS` array | Change connections between branches |
-| **Colors** | `color` field in each branch | Each branch has a hex color used for nodes, links, and glows |
-| **Layout** | `BRANCH_R`, `CHILD_R` constants | Adjust node positioning radius |
-| **AI model** | `model` field in `callClaude()` | Switch Claude model version (default: `claude-sonnet-4-20250514`) |
-| **Language** | `lang="bn"` in `<html>` tag | Change the base document language |
-
-## Browser Compatibility
-
-| Browser | Supported |
-|---------|-----------|
-| Chrome / Edge 70+ | ✅ |
-| Firefox 60+ | ✅ |
-| Safari 12+ | ✅ |
-| Mobile Safari / Chrome | ✅ (touch-enabled) |
-| IE 11 | ❌ |
-
-## License
-
-See repository for license details.
+এই প্রকল্পটি মূলত 'শূন্য' ধারণার মাধ্যমে মানবসভ্যতার জ্ঞানকে একটি আধুনিক, ইন্টারঅ্যাকটিভ এবং দার্শনিক প্ল্যাটফর্মে উপস্থাপন করার জন্য তৈরি।
