@@ -1,22 +1,89 @@
-# Zero-Civilization Engine — ZERO Book + M99 Universe
+# Zerocivlization
+## শূন্য থেকে মহাবিশ্ব
 
-A rule-governed, research-first platform blueprint for building disciplined AI outputs using **M99**, **7×19×3**, Golden Ratio flow, and **FACT–LOGIC–STYLE** verification.
+### দর্শন:
+> "শূন্য থেকে শুরু করে, আমরা সংখ্যায় পৌঁছাই।
+> সংখ্যায় থেকে ভাষায়, ভাষা থেকে ঐতিহ্যে।
+> ঐতিহ্য সংরক্ষিত হয় স্মৃতিতে।
+> স্মৃতি জন্ম দেয় চেতনার।
+> চেতনা বিস্তৃত হয় মহাবিশ্বে।"
 
-## What this repo is
-- A documentation-driven architecture for a “Rule Engine → AI Orchestration → Proof → Automation” pipeline.
-- A living knowledge base for ZERO Civilization / Ajnan / M99 Universe maps and prototypes.
+### বিবর্তনের সিঁড়ি:
 
-## Core principles
-- **M99 trigger**: pattern-first reasoning, balance, risk-check, and disciplined delivery.
-- **7×19×3**: 7 points, ≤19 words each, 3 alternative versions.
-- **Golden depth**: explanation depth follows 1→3→8→21.
-- **FACT–LOGIC–STYLE**: outputs must be validated before final delivery.
+**০. শূন্য** → দর্শনগত ভিত্তি  
+**१. সংখ্যা** → গাণিতিক কাঠামো  
+**२. লিপি** → ভাষাগত অভিব্যক্তি  
+**३. ঐ** → সাংস্কৃতিক উত্তরাধিকার  
+**४. স্মৃতি** → অভিজ্ঞতার সংরক্ষণ  
+**५. চেতনা** → কৃত্রিম বুদ্ধিমত্তা  
+**६. মহাবিশ্ব** → সর্বজনীন সংমিশ্রণ  
 
-## Quick start (local view)
-```bash
-git clone https://github.com/xahmadrafi-dotcom/zero-civilization-engine.git
-cd zero-civilization-engine
-# open html locally (macOS)
-open site/index.html
-# Windows: start site\index.html
-# Linux: xdg-open site/index.html
+---
+
+## প্রকল্প তথ্য:
+
+**তিনটি অনুমোদিত ইমেইল, এক কেন্দ্র:**
+- 📧 **x.ahmadrafi@icloud.com** (প্রাথমিক)
+- 📧 **xskyline.ae@gmail.com** (V0/Lovable/Bolt)
+- 📧 **khanromel410@gmail.com** (AI গবেষণা)
+
+---
+
+## প্রকল্প কাঠামো:
+
+```
+Zerocivlization/
+├── 00-ZERO/              # শূন্য (দর্শন)
+├── 01-NUMBERS/           # সংখ্যা (গণিত)
+├── 02-LIPI/              # লিপি (ভাষা)
+├── 03-OITIHYO/           # ঐ (ঐতিহ্য)
+├── 04-SMARTI/            # স্মৃতি (রেকর্ড)
+├── 05-CHETONA/           # চেতনা (AI)
+├── 06-MAHABISWA/         # মহাবিশ্ব (সংমিশ্রণ)
+├── bilinguAl/            # bilinguAl সিস্টেম
+├── sokha-koi-tumi/       # মূল অ্যাপ্লিকেশন
+├── docs/                 # নথিপত্র
+└── CONTACT.md            # যোগাযোগ
+```
+
+---
+
+## bilinguAl পরিচয়:
+
+bilingUA হলো **Unified Meaning System (UMS)** — স্থানীয় চালিত কৃত্রিম বুদ্ধিমত্তা প্ল্যাটফর্ম।
+
+- ✅ বাংলা ভাষা প্রথম
+- ✅ স্থানীয় ও অফলাইন
+- ✅ অর্থ-কেন্দ্রিক
+- ✅ M99 (আহমাদ রাফি) অফিসিয়াল প্ল্যাটফর্ম
+
+---
+
+## নীতিমালা:
+
+✅ সব উত্তর বাংলায়  
+✅ তথ্য বানিয়ে নয়, যাচাই করে  
+✅ এক সময়ে এক কাজ  
+✅ AI হলো archive/assistant; সিদ্ধান্ত মানুষের  
+✅ bilinguAl নাম সঠিকভাবে লিখতে হবে  
+
+---
+
+## আমার ভেতরে মহাবিশ্ব, আমিও মহাবিশ্বের মধ্যে
+
+**Zerocivlization × bilinguAl** — এক অপূর্ব যাত্রা।
+
+```
+🐚 শূন্যের শুরু
+🧬 সংখ্যায় গঠন
+🦅 ভাষায় উড়াল
+🚀 চেতনায় যাত্রা
+✨ মহাবিশ্বে সংমিশ্রণ
+♾️ অসীমতায় ফিরে আসা
+```
+
+---
+
+**প্রথম কমিট: ২০২৬-০৯-০৪ (সেপ্টেম্বর ৪, ২০২৬)**
+
+*এটাই Zerocivlization-এর প্রকৃত শুরু।*
