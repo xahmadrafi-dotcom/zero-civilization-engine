@@ -1,0 +1,36 @@
+{
+  "structured_schema": {
+    "name": "metadata_templates",
+    "version": "ঐ ০.০২",
+    "required_fields": [
+      "project",
+      "document",
+      "version",
+      "status",
+      "updated",
+      "classification"
+    ],
+    "field_definitions": {
+      "project": "string",
+      "document": "string",
+      "version": "string",
+      "status": "string",
+      "updated": "date",
+      "classification": "string"
+    }
+  },
+  "sample_instance": {
+    "project": "M99",
+    "document": "Complete System Specification",
+    "version": "ঐ ০.০২",
+    "status": "Draft",
+    "updated": "2026-06-24",
+    "classification": "Internal"
+  },
+  "validation_hints": [
+    "version must start with ঐ",
+    "updated must use YYYY-MM-DD",
+    "classification must be one of Internal Public Restricted",
+    "required_fields must not be empty"
+  ]
+}
