@@ -1,0 +1,486 @@
+
+# ============================================================
+# M99 MASTER INDEX — PORTABLE IDENTITY & PROJECT REGISTRY
+# Version: 1.0.0
+# Status: INITIALIZED / PARTIALLY VERIFIED
+# Purpose: Cross-AI continuity, asset discovery, provenance
+# ============================================================
+
+schema_version: "1.0.0"
+document_id: "M99-MASTER-INDEX-001"
+last_updated: "2026-10-17"
+language: "bn"
+timezone: "Asia/Dhaka"
+
+identity:
+  primary_name: "Ahmad Rafi"
+  alternate_name: "Rafiqul Islam"
+  identity_namespace: "M99"
+  umbrella_project: "M99 Universe"
+  core_engine: "ZERO Civilization Engine"
+
+  identity_policy:
+    - "Treat M99 as one continuous project namespace."
+    - "Do not assume separate names imply separate projects."
+    - "Do not assume different accounts are the same account."
+    - "Preserve historical records and version lineage."
+    - "Mark unknown information as UNKNOWN."
+    - "Never claim an asset is deleted without evidence."
+
+  ownership_policy:
+    declared_creator: "Ahmad Rafi / M99"
+    verification_status: "USER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    ai_role: "CONTRIBUTOR_OR_TOOL"
+    platform_role: "HOST_OR_BUILD_ENVIRONMENT"
+    rule: "Tool participation does not establish legal ownership."
+
+master_gpt:
+  name: "Master GPT"
+  role: "Central reasoning, coordination, and project continuity"
+  user_requirement: "Preserve identity; do not convert into a plugin."
+  implementation_status: "CUSTOM_GPT_CONFIGURATION"
+  note: >-
+    This is the user's intended role definition, not a claim of
+    universal control over other GPTs, accounts, or services.
+
+repository:
+  provider: "GitHub"
+  owner_or_namespace: "xahmadrafi-dotcom"
+  name: "zero-civilization-engine"
+  url: "https://github.com/xahmadrafi-dotcom/zero-civilization-engine"
+  role: "Canonical project documentation and index"
+  access_status: "NOT_CHECKED"
+  default_branch: "UNKNOWN"
+  live_deployment: "UNKNOWN"
+
+related_repositories:
+  - name: "m99-universe"
+    url: "UNKNOWN"
+    status: "UNKNOWN"
+  - name: "bangla"
+    url: "UNKNOWN"
+    status: "UNKNOWN"
+  - name: "dev-philosophy-research"
+    url: "UNKNOWN"
+    status: "UNKNOWN"
+  - name: "jagaran-album"
+    url: "UNKNOWN"
+    status: "UNKNOWN"
+  - name: "miracle-code-suite"
+    url: "UNKNOWN"
+    status: "UNKNOWN"
+
+account_registry:
+  policy: >-
+    Record each login identity separately. Link identities only after
+    the user verifies account access and the relationship.
+  accounts:
+    - id: "CHATGPT-ACCOUNT-A"
+      provider: "OpenAI"
+      login_method: "UNKNOWN"
+      email: "UNKNOWN"
+      builder_profiles: []
+      verification: "PENDING"
+
+    - id: "CHATGPT-ACCOUNT-B"
+      provider: "OpenAI"
+      login_method: "UNKNOWN"
+      email: "UNKNOWN"
+      builder_profiles: []
+      verification: "PENDING"
+
+    - id: "APPLE-ID-ACCOUNT"
+      provider: "Apple"
+      login_method: "Apple ID"
+      email: "UNKNOWN"
+      linked_chatgpt_identity: "UNKNOWN"
+      verification: "PENDING"
+
+    - id: "GMAIL-ACCOUNT"
+      provider: "Google"
+      login_method: "Google"
+      email: "UNKNOWN"
+      linked_chatgpt_identity: "UNKNOWN"
+      verification: "PENDING"
+
+    - id: "GITHUB-ACCOUNT"
+      provider: "GitHub"
+      login_method: "UNKNOWN"
+      email: "iCloud email reportedly used"
+      verified_email: false
+      verification: "PENDING"
+
+    - id: "BUILDER-PROFILE-A"
+      provider: "UNKNOWN"
+      profile_name: "PlaceholderGPT"
+      account_owner_mapping: "UNKNOWN"
+      status: "UNKNOWN"
+
+    - id: "BUILDER-PROFILE-B"
+      provider: "UNKNOWN"
+      profile_name: "xskylineae-ai"
+      account_owner_mapping: "UNKNOWN"
+      status: "UNKNOWN"
+
+  security:
+    store_passwords: false
+    store_api_keys: false
+    store_recovery_codes: false
+    store_session_cookies: false
+    store_access_tokens: false
+    secrets_location: "Provider-approved secret manager"
+    never_commit_secrets_to_git: true
+
+connected_services:
+  - name: "ChatGPT"
+    status: "USER_REPORTED"
+  - name: "ChatGPT Codex Connector"
+    status: "USER_REPORTED"
+  - name: "Claude"
+    status: "USER_REPORTED"
+  - name: "Cursor"
+    status: "USER_REPORTED"
+  - name: "Replit"
+    status: "USER_REPORTED"
+  - name: "Lovable"
+    status: "USER_REPORTED"
+  - name: "Vercel"
+    status: "USER_REPORTED"
+  - name: "GitHub Models"
+    status: "USER_REPORTED"
+  - name: "Copilot"
+    status: "USER_REPORTED"
+
+core_projects:
+  - id: "P001"
+    name: "ZERO Civilization Engine"
+    role: "Core civilization framework"
+    status: "EXISTENCE_REPORTED"
+  - id: "P002"
+    name: "M99 Universe"
+    role: "Umbrella intellectual property namespace"
+    status: "EXISTENCE_REPORTED"
+  - id: "P003"
+    name: "ONE SKY ENGINE"
+    role: "Cultural and spiritual systems project"
+    status: "DOCUMENTED_IN_USER_MATERIAL"
+  - id: "P004"
+    name: "Universe Miracle System"
+    role: "Conceptual framework"
+    status: "DOCUMENTED_IN_USER_MATERIAL"
+  - id: "P005"
+    name: "বাংলা AI Ontology"
+    role: "Bengali language and AI knowledge architecture"
+    status: "DOCUMENTED_IN_USER_MATERIAL"
+  - id: "P006"
+    name: "Jagaran"
+    role: "Music and cultural production"
+    status: "EXISTENCE_REPORTED"
+  - id: "P007"
+    name: "Cosmos History Engine"
+    role: "History and knowledge framework"
+    status: "DOCUMENTED_IN_USER_MATERIAL"
+  - id: "P008"
+    name: "M99 Studio"
+    role: "Creator tools and production ecosystem"
+    status: "PLANNED_OR_UNKNOWN"
+
+asset_schema:
+  required_fields:
+    - "asset_id"
+    - "asset_name"
+    - "asset_type"
+    - "parent_project"
+    - "source_url"
+    - "creation_date"
+    - "current_location"
+    - "version"
+    - "status"
+    - "platform"
+    - "creator_or_contributor"
+    - "ownership_status"
+    - "evidence"
+  allowed_statuses:
+    - "VERIFIED"
+    - "USER_REPORTED"
+    - "PROTOTYPE"
+    - "ACTIVE"
+    - "ARCHIVED"
+    - "DORMANT"
+    - "UNKNOWN"
+  missing_value: "UNKNOWN"
+
+shared_links:
+  source: "User-provided shared-link inventory"
+  content_access_verified: false
+  note: >-
+    URLs and titles below were supplied by the user.
+    Their current availability and contents have not been independently checked.
+  items:
+    - title: "পরিচয় ও নীতিমালা সংক্ষেপ"
+      url: "https://chatgpt.com/share/6ad27794-f720-83ec-9944-2a63a701f19f"
+      date: "2026-10-17"
+      type: "chat"
+    - title: "কুরআনিক সংযোগ বিশ্লেষণ"
+      url: "https://chatgpt.com/share/6ac57027-4e98-83ee-bead-13269becaef4"
+      date: "2026-10-07"
+      type: "chat"
+    - title: "ব্রাঞ্চ · Documented Universe Blueprint"
+      url: "https://chatgpt.com/share/6ac53ed3-8434-83ee-816d-ae0d1cbecfba"
+      date: "2026-10-07"
+      type: "chat"
+    - title: "শুভেচ্ছা ও আড্ডা"
+      url: "https://chatgpt.com/share/6ab1c09e-03d8-83ee-95dc-f890682e167f"
+      date: "2026-09-22"
+      type: "chat"
+    - title: "ZERO Mindmap v4 Upgrade"
+      url: "https://chatgpt.com/share/6aac19fd-0a70-83ee-b35f-e65b3088e055"
+      date: "2026-09-17"
+      type: "chat"
+    - title: "আইডিয়া থেকে পরিকল্পনা"
+      url: "https://chatgpt.com/share/6aac0e20-6b7c-83e8-a220-13f432210be0"
+      date: "2026-09-17"
+      type: "chat"
+    - title: "শেখার তারা"
+      url: "https://chatgpt.com/share/6aa07778-2428-83ee-9ec5-fd83ba740fe0"
+      date: "2026-09-09"
+      type: "chat"
+    - title: "অ্যাকাউন্ট এবং GPT সম্পর্ক"
+      url: "https://chatgpt.com/share/6a96dee8-faa0-83ee-a52e-4e6bc1a6399e"
+      date: "2026-09-01"
+      type: "chat"
+    - title: "M99 সংযোগ লগ টেমপ্লেট"
+      url: "https://chatgpt.com/canvas/shared/6a8f2428a1f08191b22d0b788cb89c92"
+      date: "2026-08-26"
+      type: "canvas"
+    - title: "ফাইল বিশ্লেষণ পরিকল্পনা"
+      url: "https://chatgpt.com/share/6a8d421b-94ec-83ee-b6b4-e04b280ecc4c"
+      date: "2026-08-25"
+      type: "chat"
+    - title: "ঠিকানা বিশ্লেষণ"
+      url: "https://chatgpt.com/share/6a8d0827-e3d4-83ee-834c-df5db7b6f486"
+      date: "2026-08-25"
+      type: "chat"
+    - title: "API Endpoint Specification"
+      url: "https://chatgpt.com/share/6a861a10-ab20-83e8-80ba-f947181865b2"
+      date: "2026-08-20"
+      type: "chat"
+    - title: "জাগরণ লিরিক তালিকা"
+      url: "https://chatgpt.com/s/t_6a71bdf8888c8191a373c48ab257b3dd"
+      date: "2026-08-04"
+      type: "post"
+    - title: "শূন্যের মহাজাগতিক দ্বার"
+      url: "https://chatgpt.com/s/m_6a6e35eeaf488191b43906d4f8473a77"
+      date: "2026-08-02"
+      type: "image"
+    - title: "অজান্তে তৈরি সহকারী"
+      url: "https://chatgpt.com/s/t_6a6cb888b90c8191bfcb993f3923e8f7"
+      date: "2026-07-31"
+      type: "post"
+    - title: "Execution Blueprint Zero"
+      url: "https://chatgpt.com/s/t_6a6c7970a024819190af92abc761c5fb"
+      date: "2026-07-31"
+      type: "post"
+    - title: "যাত্রা প্রস্তুত"
+      url: "https://chatgpt.com/share/6a67a389-12d8-83ee-a0cb-9ae04063973d"
+      date: "2026-07-28"
+      type: "chat"
+    - title: "Grok ভিডিও প্রম্পট"
+      url: "https://chatgpt.com/share/6a506c66-9444-83ee-9ea4-d708514588cb"
+      date: "2026-07-10"
+      type: "chat"
+    - title: "ফাইল বিশ্লেষণ পরিকল্পনা"
+      url: "https://chatgpt.com/share/6a4d7aef-e92c-83ee-8dee-58c54d31ea6d"
+      date: "2026-07-08"
+      type: "chat"
+    - title: "আমি কে AGENT-X"
+      url: "https://chatgpt.com/share/6a3f8ad7-7224-83ee-ad23-99a85a07e3cb"
+      date: "2026-06-27"
+      type: "chat"
+    - title: "Three.js প্রজেক্ট সংশোধন"
+      url: "https://chatgpt.com/share/6a070f21-b838-83a4-bd1a-4880ae5c930b"
+      date: "2026-05-15"
+      type: "chat"
+    - title: "বাংলাদেশে AI ব্যবহার"
+      url: "https://chatgpt.com/share/69f51362-d1ac-83e8-8e2f-8428079bb72c"
+      date: "2026-05-02"
+      type: "chat"
+    - title: "বাংলা কাওয়ালি সৃষ্টি"
+      url: "https://chatgpt.com/share/69f3bcca-8fc8-83e8-9609-7fc0f100327c"
+      date: "2026-05-01"
+      type: "chat"
+    - title: "GitHub First Commit Guide"
+      url: "https://chatgpt.com/share/69dffc0a-16d0-83a6-8bb9-5163f8592418"
+      date: "2026-04-16"
+      type: "chat"
+    - title: "লিংক বিশ্লেষণ সহায়তা"
+      url: "https://chatgpt.com/share/69c55620-c4e0-83ab-b34c-9f4f38a168d2"
+      date: "2026-03-26"
+      type: "chat"
+    - title: "iPhone journal ব্যবহার টিপস-iphone ইমেইল"
+      url: "https://chatgpt.com/s/t_69a612fbf60c8191bcdea093bceed455"
+      date: "2026-03-03"
+      type: "post"
+    - title: "iPhone journal ব্যবহার টিপস"
+      url: "https://chatgpt.com/share/696ec162-709c-8012-9605-e9fec4a5afd0"
+      date: "2026-01-20"
+      type: "chat"
+    - title: "Suno AI lyrics"
+      url: "https://chatgpt.com/share/696a7a16-4c20-8012-8e0a-315ff3673f1c"
+      date: "2026-01-16"
+      type: "chat"
+    - title: "Grok and Islamic modernism"
+      url: "https://chatgpt.com/share/696a680b-2da8-8012-a8ac-b61c0c8eaec4"
+      date: "2026-01-16"
+      type: "chat"
+    - title: "Branch · ইউনিভার্সাল মিরাকল সিস্টেম"
+      url: "https://chatgpt.com/s/t_69653cfa41848191a1533177db26e5f0"
+      date: "2026-01-13"
+      type: "post"
+    - title: "Documented Universe Blueprint"
+      url: "https://chatgpt.com/share/695ffbc4-2910-8012-b7a1-d905a6aa6362"
+      date: "2026-01-09"
+      type: "chat"
+    - title: "Branch · ইউনিভার্সাল মিরাকল সিস্টেম"
+      url: "https://chatgpt.com/s/t_695b13ef4cf081919aad479e8e6a8969"
+      date: "2026-01-05"
+      type: "post"
+
+quantum_quranic_core:
+  title: "Quantum–Quranic Core Blueprint"
+  framework_type: "CONCEPTUAL_AND_SYMBOLIC"
+  scientific_validation: "NOT_ESTABLISHED"
+  assumption: >-
+    Metaphysical links among Quranic patterns, mathematics, and cosmic
+    constants are symbolic hypotheses, not established physical laws.
+  points:
+    - "Universe symmetry can inspire mathematical readings of Quranic structure and cosmic order."
+    - "Golden Ratio offers a geometric model; universal control over consciousness is unproven."
+    - "Fibonacci sequences describe some natural growth patterns, not every natural system."
+    - "Intention influences choices and attention; quantum fields are not proven to obey personal wishes."
+    - "Ethical consistency can improve trust and cooperation; miraculous physical effects remain unverified."
+    - "Time dilation exists in relativity; consciousness-driven probability bending lacks established evidence."
+    - "Human duty can unite reflection, ethical conduct, and careful interpretation of signs."
+  guardrails:
+    - "Do not present metaphor as experimental physics."
+    - "Do not claim a Quranic verse proves a specific physical constant without evidence."
+    - "Distinguish theology, philosophy, mathematical analogy, and empirical science."
+
+practical_human_system:
+  title: "Practical Human System for Meaningful Outcomes"
+  framework_type: "BEHAVIORAL_PLANNING"
+  assumption: "Quantum alignment is a metaphor for focus, not a proven quantum mechanism."
+  cycles_days: [1, 3, 8, 21]
+  phases:
+    - name: "Seed"
+      action: "Define one ethical and measurable goal."
+    - name: "Expansion"
+      action: "Break the goal into small, testable tasks."
+    - name: "Stabilization"
+      action: "Review evidence, outcomes, and sustainability."
+  points:
+    - "Choose one measurable goal consistent with truth, ethics, and service."
+    - "Use the Golden Ratio as an optional design heuristic, not a universal law."
+    - "Schedule work in 1, 3, 8, and 21-day review cycles."
+    - "Use focused visualization, then immediately define a concrete next action."
+    - "Maintain honesty, accountability, and respect for other people's rights."
+    - "Track measurable progress, obstacles, energy, and relevant coincidences without assuming causation."
+    - "Review the 21-day cycle and revise the plan using actual results."
+
+divine_mathematical_governance:
+  title: "Advanced Divine–Mathematical Governance Model"
+  framework_type: "CONCEPTUAL_GOVERNANCE"
+  assumption: "Metaphysical governance is conceptual; it is not a mechanical law of physics."
+  points:
+    - "Model civilization through interacting layers of rhythm, geometry, ethics, and institutions."
+    - "Use the Golden Ratio as an optional resource-allocation hypothesis, subject to testing."
+    - "Use staged growth and feedback to reduce institutional overload and systemic failure."
+    - "Use Quranic ethical principles to frame justice, responsibility, and public trust."
+    - "Treat quantum uncertainty as a physical concept, not proof of a predetermined divine pattern."
+    - "Describe miracles as theological beliefs, not experimentally predictable engineering outputs."
+    - "Build resilient institutions by combining ethical principles, evidence, and scalable systems."
+
+cross_ai_working_rules:
+  startup_sequence:
+    - "Read this M99 Master Index."
+    - "Confirm the active user account and current project."
+    - "Locate the primary source document."
+    - "Check current version and available evidence."
+    - "List missing information as UNKNOWN."
+    - "Record conflicts without overwriting either claim."
+    - "Execute one small verified task at a time."
+
+  conflict_record:
+    fields:
+      - "claim_a"
+      - "claim_b"
+      - "source_a"
+      - "source_b"
+      - "record_date"
+      - "version"
+      - "verified_facts"
+      - "unknowns"
+      - "decision"
+    rule: "Preserve both source records until reconciliation is supported by evidence."
+
+  contribution_record:
+    fields:
+      - "human_creator"
+      - "ai_contributors"
+      - "build_platform"
+      - "repository"
+      - "evidence"
+    rule: "AI contribution does not automatically establish ownership."
+
+  historical_discovery:
+    rule: "Register newly discovered old material as a historical record first."
+    required:
+      - "original_date"
+      - "original_location"
+      - "source_document"
+      - "change_history"
+      - "current_location"
+
+synchronization:
+  enabled: false
+  current_mode: "PORTABLE_STATIC_MANIFEST"
+  desired_mode: "AUTHORIZED_API_OR_OAUTH_INTEGRATION"
+  requirements:
+    - "Explicit authorization for every connected account."
+    - "Documented API or supported connector."
+    - "Secure token storage outside the repository."
+    - "Conflict handling and duplicate detection."
+    - "Audit log for every write or transfer."
+    - "Backup before automated changes."
+  important: >-
+    This YAML file does not itself log into accounts, fetch shared chats,
+    transfer files, or synchronize profiles. Those functions require a
+    separately implemented and authorized integration.
+
+operational_priority:
+  - "Confirm the canonical GitHub repository and access."
+  - "Save this manifest in the repository."
+  - "Verify Apple, Gmail, ChatGPT, and Builder Profile relationships."
+  - "Open and inventory each shared link."
+  - "Register original documents and files."
+  - "Resolve duplicates and conflicts without deleting history."
+  - "Implement and test authorized synchronization."
+  - "Publish a verified public index only after privacy review."
+
+release_policy:
+  default_visibility: "PRIVATE_UNTIL_REVIEWED"
+  publish_personal_emails: false
+  publish_secrets: false
+  publish_private_chat_contents_without_review: false
+  preserve_original_sources: true
+  versioning: "SEMANTIC_VERSIONING"
+  current_release: "1.0.0"
+
+final_principle: >-
+  Identity -> Inventory -> Provenance -> Reconciliation ->
+  Build -> Test -> Publish -> Archive
+
+motto: "শূন্য থেকে সংকেত, সংকেত থেকে ব্যবস্থা।"
+seal:
+  reference: "Quran 13:11"
+  text: "আল্লাহ কোনো সম্প্রদায়ের অবস্থা পরিবর্তন করেন না, যতক্ষণ না তারা নিজেদের অবস্থা পরিবর্তন করে।"
